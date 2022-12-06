@@ -159,7 +159,12 @@ function createSlotDay($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE
         //$Date = date("Y/m/d"); 
         
         $NumberUsers = 0; 
-    
+        
+        // This short for loop cycles through the values `0` and `1`
+        // These values set the stot type, either weights or cardio
+        // Values are then passed into the InsertVar function to be 
+        // inserted into the database and create a new slot
+        
         for ($x = 0; $x <= 1; $x+=1) { 
     
             // Starts for loop that both creates the id variables for the slots (0, 1) and inserts both of them into their repsective slots
