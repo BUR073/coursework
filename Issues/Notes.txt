@@ -1,0 +1,5 @@
+Github
+
+cd /Applications/XAMPP/xamppfiles/htdocs/gym
+git commit -m "MESSAGE" 
+git push origin main OR git push -f origin main

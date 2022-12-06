@@ -1,4 +1,4 @@
-Txt file to keep track of issues I have had
+Text file to keep track of issues I have had
 
 1. Time inserted into db as minutes instead of hours
 - Orignally had '00' appeneded to the time value to format it to 24hr time
@@ -19,3 +19,4 @@ Txt file to keep track of issues I have had
 - This is needed to create the slots everyday
 - Hence the name daemon 
 - NOT YET FIXED 
+
