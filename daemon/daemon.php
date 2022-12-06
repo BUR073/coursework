@@ -108,6 +108,8 @@ function InsertVar($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAM
 
     echo 'Type: ', $Type . "<br>" . "<br>"; 
 
+    echo 'Date: ', $Date . "<br>" . "<br>"; 
+
     echo '---------------------------------------------' . "<br>"; 
    
     $stmt = $con->prepare('INSERT INTO `Slot`(`SlotId`, `TimeStart`, `TimeFinish`, `Date`, `NumberUsers`, `Type`) VALUES (?, ?, ?, ?, ?, ?) '); {
@@ -120,7 +122,7 @@ function InsertVar($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAM
  
      }
 }
-function createSlotDay($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $hours_open, $time_open, $date) {
+function createSlotDay($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $hours_open, $time_open, $Date) {
     while($hours_open != 0) { // Start of while loop 
 
         // Echo var to make it easier to debug
@@ -142,7 +144,7 @@ function createSlotDay($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE
     
         $TimeFinishFormat = formattime1($TimeFinish); 
     
-        $Date = date("Y/m/d"); 
+        //$Date = date("Y/m/d"); 
         
         $NumberUsers = 0; 
     
@@ -165,16 +167,23 @@ function createSlotDay($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE
 
 }
 
-function loopSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $hours_open, $time_open, $date){
-    for ($x = 1; $x <= 7; $x++) {
-        createSlotDay($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $hours_open, $time_open, $date);
-        
+function addDate($currentDate){
+    $dateNew = date('Y-m-d', strtotime($currentDate. ' + 1 days'));
 
-        $date = date('Y-m-d', strtotime($date. ' + `$x` days'));
+    return $dateNew;
+}
+
+function loopSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $hours_open, $time_open, $date){
+    $dateNew = date("Y/m/d");
+
+    for ($x = 1; $x <= 6; $x++) {
+        $dateNew = addDate($dateNew);
+        createSlotDay($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $hours_open, $time_open, $dateNew);
+        
       }
 }
 
-
+createSlotDay($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $hours_open, $time_open, $date);
 loopSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $hours_open, $time_open, $date)
 
 

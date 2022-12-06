@@ -20,3 +20,8 @@ Text file to keep track of issues I have had
 - Hence the name daemon 
 - NOT YET FIXED 
 
+4. Adding 1 day to a date 
+- Needed for daemon.php
+- Allows multiple days worth of slots to be created
+- Currently does not work, no erros but creates 5 days worth of slots all with the same date value
+
