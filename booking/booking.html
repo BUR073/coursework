@@ -1,0 +1,97 @@
+<script> 
+
+// We need to use sessions, so you should always start sessions using the below code.
+session_start();
+// If the user is not logged in redirect to the login page...
+if (!isset($_SESSION['loggedin'])) {
+	header('Location: ../logon/index.html');
+	exit;
+}
+
+</script> 
+
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Gym</title> 
+        <!-- Title -->
+
+		<link href="../styles/style.css" rel="stylesheet" type="text/css">
+        <!-- Link to CSS Stylesheet --> 
+
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+        <!-- Link to fotnawesome for icons --> 
+
+	</head>
+	<body class="loggedin">
+		<nav class="navtop">
+			<div>
+				<h1>Booking</h1>
+                <!-- Heading --> 
+
+				<a href="../membership/membership.html"><i class="fas fa-table"></i>Manage Memberships</a>
+                <!-- Manage memberships button --> 
+
+				<a href="../home/home.php"><i class="fas fa-home"></i>Home</a>
+                <!-- Home button -->  
+
+				<a href="../home/profile.php"><i class="fas fa-user-circle"></i>Profile</a>
+                <!-- Profile button --> 
+
+				<a href="../logon/logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
+                <!-- Logout buttone --> 
+				
+				
+			</div>
+		</nav>
+		<div class="content">
+            <!-- Define new division--> 
+
+			<h2>Booking</h2>
+            <h1>
+                Lorum ipsum
+            </h1>
+
+			<p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut eu luctus lectus, sed convallis tellus. Quisque sodales erat in pharetra iaculis. Nullam iaculis leo quis sapien cursus, sed varius urna mattis. Fusce aliquet condimentum augue non blandit. Donec aliquam mollis pellentesque. Fusce facilisis mattis nibh. Vivamus semper tortor eu convallis dictum. Cras sollicitudin ipsum nec tempor aliquet. Vestibulum sit amet lorem in eros sagittis laoreet.
+            </p>
+
+			
+		</div>
+
+        <div>
+
+			<form action="bookingBackend.php" method="post" autocomplete="off">
+
+				<input type="time" name="timeStart" placeholder="Session Start Time" id="timeStart" required>
+
+
+				<input type="time" name="timeEnd" placeholder="Session End Time" id="timeEnd" required>
+
+				<input type="date" name="date" placeholder="Session Date" id="date" required>
+
+				<label for="gymType">Select Gym:</label>
+				<select name="gymType" id="gymType">
+   				<option value="cardio">Cardiovascular Gym</option>
+  				<option value="weights">Weights Room</option>
+				</select>
+
+				<input type="submit" value="Book">
+			
+			</form>
+			
+
+				<script>
+					function backend() {
+					  window.location.href="../booking/bookingBackend.php";
+					}
+				</script>
+
+			
+		</div>
+
+	</body>
+</html>
+

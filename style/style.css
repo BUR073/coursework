@@ -1,0 +1,54 @@
+body {
+    background: rgb(256, 256, 256); 
+}
+
+.form {
+    height: 150%;
+    width: device-width;
+    padding: 0%;
+    margin: 0%; 
+    border: 1px solid black; 
+    background-color: lightblue;
+}
+
+.login {
+    text-align: centre; 
+    height: device-height; 
+    width: device-width; 
+}
+
+.header {
+    padding: 1px;
+    width: device-width;
+    height: device-height;
+    text-align: center;
+    background: blue;
+    color: white;
+    font-size: 15px;
+  }
+
+  /* CSS for inputs below */
+  input {
+    width: 99%;
+    padding: 12px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 10px; 
+    margin-left: 5px; 
+    margin-left: 5px; 
+  }
+  label {
+    width: 100%; 
+    padding: 12px 20px; 
+    margin: 8px; 
+    display: inline-block; 
+
+
+  }
+
+  input[type=submit]:hover {
+    background-color: #45a049;
+  }

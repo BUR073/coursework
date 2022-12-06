@@ -1,0 +1,55 @@
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Gym</title>
+		<link href="../styles/style.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+	</head>
+	<body class="loggedin">
+		<nav class="navtop">
+			<div>
+				<h1>Gym Home</h1>
+				<a href=""><i class="fas fa-book"></i>Booking</a>
+				<a href="../contactUs/contactUs.html"><i class="fas fa-address-book"></i>Contact Us</a>
+				<a href="../home/profile.php"><i class="fas fa-user-circle"></i>Profile</a>
+				<a href="../logon/logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
+				
+				
+			</div>
+		</nav>
+		<div class="content">
+			<h2>Manage your memberships</h2>
+            <p>
+                Please select an option below to start or cancel a membership.
+            </p>
+			<form action="membership.php" method="post">
+                <input type="radio" id="gym" name="action" value="gym">
+                <label for="gym">Gym</label><br>
+
+                <input type="radio" id="leisure" name="action" value="leisure">
+                <label for="css">Leisure</label><br>
+
+                <input type="radio" id="cancel" name="action" value="cancel">
+                <label for="cancel">Cancel Membership</label><br>
+			
+				<input type="submit" value="Submit">
+			
+
+				
+            </form>
+
+			
+
+			
+                
+				
+                
+                
+            
+            
+
+			
+		</div>
+	</body>
+</html>
