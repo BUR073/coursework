@@ -52,3 +52,36 @@ body {
   input[type=submit]:hover {
     background-color: #45a049;
   }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center; 
+    padding: 10%; 
+  }
+
+
+
+  th {
+    height: 40px;
+  }
+
+  tr {
+    height: 20px;
+  }
+
+  #adminTable tr:nth-child(even){background-color: #f2f2f2;}
+
+  #adminTable tr:hover {background-color: #ddd;}
+
+  #adminTable {
+    font-family: nunito;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  #adminTable td, #adminTable th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+
