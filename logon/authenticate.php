@@ -28,7 +28,7 @@ if ( !isset($_POST['username'], $_POST['password']) ) {
 }
 
 // Prepare our SQL, preparing the SQL statement will prevent SQL injection.
-if ($stmt = $con->prepare('SELECT UserId, password FROM User WHERE username = ?')) {
+if ($stmt = $con->prepare('SELECT UserId, password, admin FROM User WHERE username = ?')) {
 	// Bind parameters (s = string, i = int, b = blob, etc), in our case the username is a string so we use "s"
 	$stmt->bind_param('s', $_POST['username']);
 	$stmt->execute();
@@ -36,7 +36,7 @@ if ($stmt = $con->prepare('SELECT UserId, password FROM User WHERE username = ?'
 	$stmt->store_result();
 
     if ($stmt->num_rows > 0) {
-        $stmt->bind_result($id, $password);
+        $stmt->bind_result($id, $password, $admin);
         $stmt->fetch();
         // Account exists, now we verify the password.
 
@@ -49,12 +49,11 @@ if ($stmt = $con->prepare('SELECT UserId, password FROM User WHERE username = ?'
             $_SESSION['id'] = $id;
             header('Location: ../home/home.php');
 
-            // if ($admin == 0) {
-            //     echo('Not admin');
-            //     header('Location: ../home/home.php');
-            // } else {
-            //     header('Location: ../admin/adminHome.php');
-            // }
+            if ($admin == 0) {
+                header('Location: ../home/home.php');
+            } else {
+                header('Location: ../admin/adminHome.php');
+            }
 
             
 
