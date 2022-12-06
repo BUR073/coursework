@@ -2,4 +2,8 @@ Github
 
 cd /Applications/XAMPP/xamppfiles/htdocs/gym
 git commit -m "MESSAGE" 
-git push origin main OR git push -f origin main
+git push origin main 
+
+If this throws and error TRY
+ 
+git push -f origin main
