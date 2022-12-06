@@ -61,15 +61,6 @@ body {
   }
 
 
-
-  th {
-    height: 40px;
-  }
-
-  tr {
-    height: 20px;
-  }
-
   #adminTable tr:nth-child(even){background-color: #f2f2f2;}
 
   #adminTable tr:hover {background-color: #ddd;}
@@ -78,10 +69,12 @@ body {
     font-family: nunito;
     border-collapse: collapse;
     width: 100%;
+    border: 1px solid;
   }
 
   #adminTable td, #adminTable th {
     border: 1px solid #ddd;
     padding: 8px;
+    border: 1px solid;
   }
 

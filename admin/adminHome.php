@@ -35,26 +35,27 @@ echo "Failed to connect to MySQL: " . mysqli_connect_error();
 $date = date("Y/m/d");
 $result = mysqli_query($con,"SELECT `SlotId`, `TimeStart`, `TimeFinish`, `Date`, `NumberUsers`, `Type` FROM `Slot` WHERE `Date` >= $date");
 echo "<link href='../styles/style.css' rel='stylesheet' type='text/css'>";
+
 echo "<table id='adminTable'>
-<tr style='border: 1px solid;'>
-<th style='border: 1px solid;'>SlotId</th>
-<th style='border: 1px solid;'>Time Start</th>
-<th style='border: 1px solid;'>Time Finish</th>
-<th style='border: 1px solid;'>Date</th>
-<th style='border: 1px solid;'>Number of Users</th>
-<th style='border: 1px solid;'>Type</th>
+<tr>
+<th>SlotId</th>
+<th>Time Start</th>
+<th>Time Finish</th>
+<th>Date</th>
+<th>Number of Users</th>
+<th>Type</th>
 </tr>";
 
 while($row = mysqli_fetch_array($result))
 {
 
-echo "<tr style='border: 1px solid;'>";
-echo "<td style='border: 1px solid;'>" . $row['SlotId'] . "</td>";
-echo "<td style='border: 1px solid;'>" . $row['TimeStart'] . "</td>";
-echo "<td style='border: 1px solid;'>" . $row['TimeFinish'] . "</td>";
-echo "<td style='border: 1px solid;'>" . $row['Date'] . "</td>";
-echo "<td style='border: 1px solid;'>" . $row['NumberUsers'] . "</td>";
-echo "<td style='border: 1px solid;'>" . $row['Type'] . "</td>";
+echo "<tr>";
+echo "<td>" . $row['SlotId'] . "</td>";
+echo "<td>" . $row['TimeStart'] . "</td>";
+echo "<td>" . $row['TimeFinish'] . "</td>";
+echo "<td>" . $row['Date'] . "</td>";
+echo "<td>" . $row['NumberUsers'] . "</td>";
+echo "<td>" . $row['Type'] . "</td>";
 echo "</tr>";
 }
 echo "</table>";
