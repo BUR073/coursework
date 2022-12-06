@@ -13,6 +13,12 @@ ini_set('display_startup_errors', 1);
 
 error_reporting(E_ALL);
 
+// These are the database connection variables
+// They are set once here and are then passed into functions
+// This means they do not have to be re-written in each function
+// except for $con and is this is where the the database variables
+// are passed into for the connection
+
 $DATABASE_HOST = 'localhost';
 $DATABASE_USER = 'root';
 $DATABASE_PASS = '';
@@ -46,6 +52,10 @@ function goHome(){
     
 }
 
+// Function findSlot takes all the database variables and the slot start time and date
+// The slot is then found in the database where the values match the slotId is binded
+// to the variable $slotId
+
 function findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $timeStart, $slotDate){
     $con = mysqli_connect($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME);
     $stmt = $con->prepare('SELECT `SlotId` FROM `Slot` WHERE `TimeStart` = ? AND `Date` = ? ');
@@ -58,6 +68,10 @@ function findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME
     return $slotId; 
     
 }
+// Function checkUserBookings takes all the database variables and the userId along with the current date
+// The function then finds out wether the user already has a booking for that day
+// This stops user's from booking multiple slots in one day 
+
 function checkUserBookings($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $userId, $Date){
     $slotId = ''; 
 
@@ -100,6 +114,10 @@ function checkUserBookings($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATA
  
 
 }
+// Function MemberShipValid takes the current date, the user's membership expiry date 
+// and the type of slot they are trying to book
+// A set of if and else statements determine wether the user has the required 
+// membership for the booking they are trying to make
 
 function MemberShipValid($date, $MemberEndDate, $BookingType, $Gym, $Cardio){
 
@@ -131,6 +149,8 @@ function MemberShipValid($date, $MemberEndDate, $BookingType, $Gym, $Cardio){
     }
 }
 
+// Function UserDetail takes all the database variables and then takes the UserId stored
+// in the session variable
 
 function UserDetail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con){
     $userId = $_SESSION['id'];
@@ -143,6 +163,9 @@ function UserDetail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NA
     $Cardio = ''; 
 
     // Define required varibale for sql below
+
+    // The SQL statement below queries the table `MemberShipCore` to find the users
+    // MemberShipId which is then stored in the variable $MemberShipId
     
     $stmt = $con->prepare('SELECT `MemberShipId` FROM `MemberShipCore` Where `UserId` = ?');
     $stmt->bind_param('s', $userId);
@@ -153,10 +176,12 @@ function UserDetail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NA
 
     echo $MemberShipId, "<br>"; 
 
-    $stmt = $con->prepare('SELECT `StartDate`, `EndDate`,`Gym`, `Cardio` FROM `MembershipCore` INNER JOIN `MemberShipType` ON `MemberShipCore`.`MemberShipId` = `MemberShipType`.`MemberShipId` WHERE `MemberShipCore`.`MemberShipId` = ? ORDER BY StartDate;');
+    // This next SQL statement queries both `MembershipCore` and `MemberShipType`
+    // It finds the details of the user's membership including start date, end date and type
+    // These details are then stored in the variables $MemberStartDate, $MemberEndDate, $Gym and $Cardio
+    // With the last two variables either being a 0 or a 1
 
-    // SELECT column_name(s) FROM table1 FULL OUTER JOIN table2 ON table1.column_name = table2.column_name WHERE condition;
-    // In this case we can use the account ID to get the account info.
+    $stmt = $con->prepare('SELECT `StartDate`, `EndDate`,`Gym`, `Cardio` FROM `MembershipCore` INNER JOIN `MemberShipType` ON `MemberShipCore`.`MemberShipId` = `MemberShipType`.`MemberShipId` WHERE `MemberShipCore`.`MemberShipId` = ? ORDER BY StartDate;');
     $stmt->bind_param('s', $MemberShipId);
     $stmt->execute();
     $stmt->store_result();
@@ -171,10 +196,17 @@ function UserDetail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NA
     echo 'Cardio', $Cardio, "<br>"; 
 
     $date = date("Y/m/d"); 
+
+    // This is where the booking type is retrieved from the HTML form
     $GymType = $_POST['gymType']; 
 
+    // Variables $date, $MemberEndDate, $GymType, $Gym and $Cardio are passed into the MemberShipValid
+    // function and the output is stored in the variable $MemberShipValid
     $MemberShipValid = MemberShipValid($date, $MemberEndDate, $GymType, $Gym, $Cardio); 
-
+    
+    // If the user's membership is valid then the we then need to check wether the user 
+    // already booked for that day
+    // If the user's membership is not valid they are returned to the homepage 
     if ($MemberShipValid = 1) {
         echo "<br>";
         echo "Membership is valid... Proceed to booking";
@@ -186,5 +218,6 @@ function UserDetail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NA
     }
 
 }
+
 
 UserDetail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con); 
