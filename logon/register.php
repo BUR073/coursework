@@ -6,22 +6,10 @@ ini_set('display_startup_errors', 1);
 
 error_reporting(E_ALL);
 
-$DATABASE_HOST = 'localhost';
-
-$DATABASE_USER = 'root';
-
-$DATABASE_PASS = '';
-
-$DATABASE_NAME = 'phplogin2';
-
-$con = mysqli_connect($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME);
-
-if (mysqli_connect_errno()) {
-	exit('Failed to connect to MySQL: ' . mysqli_connect_error());
-}
+$
 
 
-if (!isset($_POST['username'], $_POST['password'], $_POST['email'])) {
+if (!isset($_POST['username'], $_POST['password'], $_POST['email'], $_POST['firstName'], $_POST['lastName'], $_POST['phone'])) {
 	exit('Please complete the registration form!');
 }
 
@@ -41,49 +29,121 @@ if (strlen($_POST['password']) > 20 || strlen($_POST['password']) < 5) {
 	exit('Password must be between 5 and 20 characters long!');
 }
 
-if ($stmt = $con->prepare('SELECT id, password FROM accounts WHERE username = ?')) {
-	
-	$stmt->bind_param('s', $_POST['username']);
+function newId($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con) {
 
-	$stmt->execute();
+    $stmt = $con->prepare('SELECT MAX(UserId) FROM `User`');
+  
+    $stmt->execute();
 
-	$stmt->store_result();
+    $newId = ''; 
 
-	if ($stmt->num_rows > 0) {
+    $stmt->bind_result($newId);
 
-		echo 'Username exists, please choose another!';
+    $stmt->fetch();
 
-	} else {
+    $stmt->close();
 
-			if($stmt = $con->prepare("SELECT MAX(id) as new_id FROM accounts;")) {
-				
-			}
+    $newId++; 
 
+    return $newId; 
 
-            if ($stmt = $con->prepare('INSERT INTO accounts (username, password) VALUES (?, ?)')) {
-
-				$password = $_POST['password'];
-
-				$membershipType = 'None';
-
-				$admin = '0';
-
-				$stmt->bind_param('ss', $_POST['username'], $password);
-
-				$stmt->execute();
-
-				echo "<script>alert('Thanks for registering, please login');document.location='index.html'</script>";
-	           
-} else {
-	
-	echo "<script>alert('Could not prepare statement, please try again');document.location='register.html'</script>";
 }
+
+function checkEmail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $email){
+	if ($stmt = $con->prepare('SELECT `email` FROM `user` WHERE `email` = ?')){
+		$stmt->execute();
+
+    	$stmt->bind_param('s', $email); 
+
+    	$stmt->close();
+	} else{
+		echo "Email is not already in use... proceed"; 
+		return 0; 
 	}
-	$stmt->close();
-
-} else {
-	
-	echo "<script>alert('Could not prepare statement, please try again');document.location='register.html'</script>";
+  
+    
 }
-$con->close();
+
+function checkPhone($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $phone){
+	if ($stmt = $con->prepare('SELECT `Phone` FROM `user` WHERE `Phone` = ?')){
+		$stmt->execute();
+
+    	$stmt->bind_param('s', $phone); 
+
+    	$stmt->close();
+	} else{
+		echo "Phone is not already in use... proceed"; 
+		return 0; 
+	}
+  
+    
+}
+
+function checkUsername($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $username){
+	if ($stmt = $con->prepare('SELECT `Username` FROM `user` WHERE `Username` = ?')){
+		$stmt->execute();
+
+    	$stmt->bind_param('s', $username); 
+
+    	$stmt->close();
+	} else{
+		echo "Username is not already in use... proceed"; 
+		return 0; 
+	}
+  
+    
+}
+
+function insertVar($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $userId, $firstName, $lastName, $phone, $email, $username, $password){
+	$stmt = $con->prepare('INSERT INTO `User`(`UserId`, `Username`, `Password`, `LastName`, `FirstName`, `Email`, `Phone`) VALUES (?, ?, ?, ?, ?, ?, ?)');
+  
+    $stmt->execute();
+
+    $stmt->bind_param('sssssss', $userId, $username, $password, $lastName, $firstName, $email, $phone); 
+
+    $stmt->close();
+
+	echo "Account created"; 
+
+}
+
+function collectVar($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con){
+	$username = $_POST['username']; 
+	$password = $_POST['password']; 
+	$email = $_POST['email']; 
+	$firstName = $_POST['firstName']; 
+	$lastName = $_POST['lastName']; 
+	$phone = $_POST['phone']; 
+	$userId = newId($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con); 
+
+	$checkUsername = checkUsername($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $username);
+	$checkPhone = checkPhone($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $phone);
+	$checkEmail = checkEmail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $email);
+
+	if ($checkUsername == 0){
+		if ($checkPhone == 0 ){
+			if ($checkEmail ==0){
+				echo "Username, Phone and Email all unique... proceed";
+				insertVar($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $userId, $firstName, $lastName, $phone, $email, $username, $password); 
+			}
+		}
+	}
+}
+
+$DATABASE_HOST = 'localhost';
+
+$DATABASE_USER = 'root';
+
+$DATABASE_PASS = '';
+
+$DATABASE_NAME = 'phplogin';
+
+$con = mysqli_connect($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME);
+
+if (mysqli_connect_errno()) {
+	exit('Failed to connect to MySQL: ' . mysqli_connect_error());
+}
+
+collectVar($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con); 
+
 ?>
