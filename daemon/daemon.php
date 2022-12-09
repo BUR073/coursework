@@ -8,6 +8,9 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // Lines above prints errors for debugging
+
+
+
 $DATABASE_HOST = 'localhost';
 
 $DATABASE_USER = 'root';
@@ -128,6 +131,9 @@ function InsertVar($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAM
  
      }
 }
+
+
+
 function createSlotDay($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $hours_open, $time_open, $Date) {
     while($hours_open != 0) { // Start of while loop 
 
@@ -187,6 +193,7 @@ function createSlotDay($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE
 // Takes a date value as input and returns a date value
 // Variable $currentDate stores the date on which the loop is currently on
 
+
 function addDate($currentDate){
     // This adds 1 day to the variable $currentDate and stores it in the variable $dateNew
     $dateNew = date('Y-m-d', strtotime($currentDate. ' + 1 days'));
@@ -194,6 +201,7 @@ function addDate($currentDate){
     // $dateNew is returned to be inserted into the slot
     return $dateNew;
 }
+
 
 function loopSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $hours_open, $time_open, $date){
     

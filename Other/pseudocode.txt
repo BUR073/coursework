@@ -1,0 +1,237 @@
+Daemon.php 
+
+Daemon.php is a very important script for my project. What id does is it creates the booking slots for the next week. This is done by creating variables that store all the details for the slot like SlotId, StartTime, FinishTime, Type, and Date and using a loop to insert them into the database table `Slot` while increasing the values stored in the variable. The result is a database full of all the slots for the next week. 
+
+As the name `daemon` suggests, this program will run once a week in the background. The user will never see it and there is now way of accessing the file from the website. 
+
+DATABASE_HOST ← 'localhost'
+DATABASE_USER ← 'root'
+DATABASE_PASS ← ''
+DATABASE_NAME ← 'phplogin'
+con ← mysqli_connect(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME)
+if (mysqli_connect_errno())
+    exit('Failed to connect to MySQL: ' . mysqli_connect_error())
+hours_open ← 12
+time_open ← 6
+date ← date("Y/m/d")
+
+function formatTime1(time)
+    lengthTime = length of time
+    quadzero = "0000"
+    if lengthTime == 2
+        time = time + quadzero
+        return time
+    else
+        time = time + quadzero
+        one = "0"
+        one = one + time
+        return one
+
+function newId(database_host, database_user, database_pass, database_name, con)
+    stmt = prepare SQL query to find MAX(SlotId) from Slot
+    stmt.execute()
+    highId = ""
+    stmt.bind_result(highId)
+    stmt.fetch()
+    Stmt.close
+
+
+
+
+
+
+
+
+function InsertVar(database_host, database_user, database_pass, database_name, con, Type, SlotId, TimeStart, TimeFinish, Date, NumberUsers)
+    stmt = prepare SQL query to insert values into the Slot table
+    stmt.bind_param(Type, SlotId, TimeStart, TimeFinish, Date, NumberUsers)
+    stmt.execute()
+    stmt.close()
+
+
+
+function createSlotDay(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME, con, hours_open, time_open, Date)
+
+    while(hours_open != 0)
+
+        slot_start ← time_open
+
+        slot_finish ← slot_start + 1
+
+        TimeStart ← slot_start
+
+        TimeStartFormat ← formattime1(TimeStart)
+
+        TimeFinish ← slot_finish
+
+        TimeFinishFormat ← formattime1(TimeFinish)
+
+        NumberUsers ← 0
+
+        for (x ← 0; x <= 1; x+=1)
+
+            SlotId ← newId(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME, con)
+
+            InsertVar(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME, con, x, SlotId, TimeStartFormat, TimeFinishFormat, Date, NumberUsers)
+        Hours_open ← Hours_open - 1
+        Time_open ← Time_open + 1 
+
+function addDate(currentDate)
+    dateNew ← date('Y-m-d', strtotime(currentDate. ' + 1 days'))
+    return dateNew
+
+
+
+
+function loopSlot(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME, con, hours_open, time_open, date)
+    dateNew ← date("Y/m/d")
+    for (x ← 1; x <= 6; x++)
+        dateNew ← addDate(dateNew)
+        createSlotDay(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME, con, hours_open, time_open, dateNew)
+
+
+
+
+
+
+createSlotDay($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $hours_open, $time_open, $date);
+
+loopSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $hours_open, $time_open, $date)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Login
+
+Below is the algorithm that logs the user into the site. It takes the inputs from the HTML login form and uses POST to use them in the PHP script. It starts off by checking whether there are any details in the database that match with the user's username, if there is it moves on, otherwise it returns the user to the login page along with a message. Next, it compares the inputted password and the password. If they match the user is set as logged on the session variable and then the program determines where they need to be sent. If the user is an Admin, shown by a 1 in the admin column of databases, then they are sent to the admin page otherwise they are sent to the home page. 
+
+DATABASE_HOST = 'localhost';
+DATABASE_USER = 'root';
+DATABASE_PASS = '';
+DATABASE_NAME = 'phplogin';
+
+con = mysqli_connect(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME);
+if ( mysqli_connect_errno() )
+    exit('Failed to connect to MySQL: ' . mysqli_connect_error());
+
+if ( !isset($_POST['username'], $_POST['password']) )
+    output "Please fill both the username and password fields"
+    redirect to "index.html"
+
+if (stmt = con->prepare('SELECT UserId, password, admin FROM User WHERE username = ?'))
+    stmt->bind_param('s', $_POST['username']);
+    stmt->execute();
+    stmt->store_result();
+
+    if (stmt->num_rows > 0)
+        stmt->bind_result(id, password, admin);
+        stmt->fetch();
+
+        if ($_POST['password'] === password)
+            session_regenerate_id();
+            SESSION['loggedin'] = TRUE;
+            SESSION['name'] = $_POST['username'];
+            SESSION['id'] = id;
+
+            if (admin == 0)
+                header('Location: ../home/home.php');
+            else
+                header('Location: ../admin/adminHome.php');
+        else
+            output "Incorrect username and/or password"
+            redirect to "index.html"
+    else
+        output "Incorrect username and/or password"
+        redirect to "index.html"
+
+    stmt->close();
+
+
+                                                                                                                                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Login
+
+Below is the algorithm that logs the user into the site. It takes the inputs from the HTML login form and uses POST to use them in the PHP script. It starts off by checking whether there are any details in the database that match with the user's username, if there is it moves on, otherwise it returns the user to the login page along with a message. Next, it compares the inputted password and the password. If they match the user is set as logged on the session variable and then the program determines where they need to be sent. If the user is an Admin, shown by a 1 in the admin column of databases, then they are sent to the admin page otherwise they are sent to the home page. 
+
+DATABASE_HOST = 'localhost';
+DATABASE_USER = 'root';
+DATABASE_PASS = '';
+DATABASE_NAME = 'phplogin';
+
+con = mysqli_connect(DATABASE_HOST, DATABASE_USER, DATABASE_PASS, DATABASE_NAME);
+if ( mysqli_connect_errno() )
+    exit('Failed to connect to MySQL: ' . mysqli_connect_error());
+
+if ( !isset($_POST['username'], $_POST['password']) )
+    output "Please fill both the username and password fields"
+    redirect to "index.html"
+
+if (stmt = con->prepare('SELECT UserId, password, admin FROM User WHERE username = ?'))
+    stmt->bind_param('s', $_POST['username']);
+    stmt->execute();
+    stmt->store_result();
+
+    if (stmt->num_rows > 0)
+        stmt->bind_result(id, password, admin);
+        stmt->fetch();
+
+        if ($_POST['password'] === password)
+            session_regenerate_id();
+            SESSION['loggedin'] = TRUE;
+            SESSION['name'] = $_POST['username'];
+            SESSION['id'] = id;
+
+            if (admin == 0)
+                header('Location: ../home/home.php');
+            else
+                header('Location: ../admin/adminHome.php');
+        else
+            output "Incorrect username and/or password"
+            redirect to "index.html"
+    else
+        output "Incorrect username and/or password"
+        redirect to "index.html"
+
+    stmt->close();
+
+
+                                                                                                                                    
+
+
+
+
