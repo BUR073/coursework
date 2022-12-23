@@ -3,7 +3,13 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Profile Page</title>
+		<link href="../style/style.css" rel="stylesheet" type="text/css">
+        <link href="../styles/skeleton.css" rel="stylesheet" type="text/css">
 		<link href="../styles/style.css" rel="stylesheet" type="text/css">
+		<link href="../styles/normalize.css" rel="stylesheet" type="text/css"> 
+		<script src="jquery-3.6.1.min.js"></script>
+
+		
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
 	</head>
 	<body class="loggedin">
@@ -36,19 +42,19 @@ if (!isset($_SESSION['loggedin'])) {
 	header('Location: index.html');
 	exit;
 }
-$DATABASE_HOST = 'localhost';
-$DATABASE_USER = 'root';
-$DATABASE_PASS = '';
-$DATABASE_NAME = 'phplogin2';
-$con = mysqli_connect($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME);
-if (mysqli_connect_errno()) {
-	exit('Failed to connect to MySQL: ' . mysqli_connect_error());
+
+$con=mysqli_connect("localhost","root","","phplogin");
+// Check connection
+if (mysqli_connect_errno())
+{
+echo "Failed to connect to MySQL: " . mysqli_connect_error();
 }
-// We don't have the password or email info stored in sessions so instead we can get the results from the database.
-$stmt = $con->prepare('SELECT `Username`, `Password`, `LastName`, `FirstName`, `Email`, `Phone` FROM `User` WHERE id = ?');
-// In this case we can use the account ID to get the account info.
-$stmt->bind_param('i', $_SESSION['id']);
-$stmt->execute();
+// $date = date("Y/m/d");
+$id = $_SESSION['id']; 
+$result = mysqli_query($con,"SELECT `Username`, `Password`, `LastName`, `FirstName`, `Email`, `Phone` FROM `User` WHERE Userid = $id");
+echo "<link href='../styles/style.css' rel='stylesheet' type='text/css'>";
+
+
 
 $username = '';
 $password = '';
@@ -57,25 +63,41 @@ $firstName = '';
 $email = '';
 $phone = '';
 
-$stmt->bind_result($username, $password, $lastName, $firstName, $email, $phone);
-$stmt->fetch();
-$stmt->close();
-echo "Username: ", $username; 
-
 echo "<link href='../styles/style.css' rel='stylesheet' type='text/css'>";
-echo "<table id=adminTable>
-	<tr>
-		<td>Username:</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>Password:</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>Email:</td>
-		<td></td>
-	</tr>
-</table>s"
+echo "<table id='adminTable'>
+<tr>
+<th>Username</th>
+<th>Password</th>
+<th>Last Name</th>
+<th>First Name</th>
+<th>Email</th>
+<th>Phone</th>
+</tr>";
+
+
+while($row = mysqli_fetch_array($result))
+{
+
+echo "<tr>";
+echo "<td>" . $row['Username'] . "</td>";
+echo "<td>" . $row['Password'] . "</td>";
+echo "<td>" . $row['LastName'] . "</td>";
+echo "<td>" . $row['FirstName'] . "</td>";
+echo "<td>" . $row['Email'] . "</td>";
+echo "<td>" . $row['Phone'] . "</td>";
+
+echo "</tr>";
+echo "<tr>";
+echo "<td><input type='submit' name='username' value='Change Username'</td>";
+echo "<td><input type='submit' name='password' value='Change Password'</td>";
+echo "<td><input type='submit' name='lastName' value='Change Last Name'</td>";
+echo "<td><input type='submit' name='frstName' value='Change First Name'</td>";
+echo "<td><input type='submit' name='email' value='Change Email'</td>";
+echo "<td><input type='submit' name='phone' value='Change Phone'</td>";
+echo "</tr>";
+}
+echo "</table>";
+
+mysqli_close($con);
 ?>
 
