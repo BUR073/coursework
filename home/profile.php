@@ -8,6 +8,9 @@
 		<link href="../styles/style.css" rel="stylesheet" type="text/css">
 		<link href="../styles/normalize.css" rel="stylesheet" type="text/css"> 
 		<script src="jquery-3.6.1.min.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 		
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
@@ -25,6 +28,8 @@
 			<p>Your account details are below:</p>
 
 		</div>
+
+		
 	</body>
 </html>
 
@@ -86,18 +91,336 @@ echo "<td>" . $row['FirstName'] . "</td>";
 echo "<td>" . $row['Email'] . "</td>";
 echo "<td>" . $row['Phone'] . "</td>";
 
+
+
 echo "</tr>";
 echo "<tr>";
-echo "<td><input type='submit' name='username' value='Change Username'</td>";
-echo "<td><input type='submit' name='password' value='Change Password'</td>";
-echo "<td><input type='submit' name='lastName' value='Change Last Name'</td>";
-echo "<td><input type='submit' name='frstName' value='Change First Name'</td>";
-echo "<td><input type='submit' name='email' value='Change Email'</td>";
-echo "<td><input type='submit' name='phone' value='Change Phone'</td>";
+echo "<td><input type='button' data-toggle='modal' name='username' value='Change Username' data-target='#usernameModal' </td>";
+// <button type='button' class='btn btn-info btn-lg' data-toggle='modal' data-target='#myModal'>Open Modal</button>
+echo "<td><input type='button' data-toggle='modal' name='password' value='Change Password' data-target='#passwordModal'</td>";
+echo "<td><input type='button' data-toggle='modal' name='lastName' value='Change Last Name' data-target='#lastNameModal'</td>";
+echo "<td><input type='button' data-toggle='modal' name='frstName' value='Change First Name' data-target='#firstNameModal'</td>";
+echo "<td><input type='button' data-toggle='modal' name='email' value='Change Email' data-target='#emailModal'</td>";
+echo "<td><input type='button' data-toggle='modal' name='phone' value='Change Phone' data-target='#phoneModal'</td>";
 echo "</tr>";
 }
-echo "</table>";
+echo "<table>";
 
 mysqli_close($con);
+
+echo "
+
+<div class='container'>
+
+<!-- Modal -->
+<div class='modal fade' id='usernameModal' role='dialog'>
+
+<div class='modal-dialog'>
+    
+<!-- Modal content-->
+
+<div class='modal-content'>
+
+<div class='modal-header'>
+
+<button type='button' class='close' data-dismiss='modal'>&times;</button>
+
+<h4 class='modal-title'>Change Username</h4>
+
+</div>
+
+<div class='modal-body'>
+
+<form action=''> 
+<label for='original'>Original:</label>
+<input type='text' id='original' name='orignal'><br><br>
+
+<label for='new'>New:</label>
+<input type='text' id='new' name='news'><br><br>
+
+<input type='submit' value='Submit'
+
+
+</form>
+
+<input type='button' value='Close' data-dismiss='modal'
+
+
+</div>
+
+
+</div>
+      
+</div>
+</div>
+  
+</div>";
+
+echo "
+
+<div class='container'>
+
+<!-- Modal -->
+<div class='modal fade' id='passwordModal' role='dialog'>
+
+<div class='modal-dialog'>
+    
+<!-- Modal content-->
+
+<div class='modal-content'>
+
+<div class='modal-header'>
+
+<button type='button' class='close' data-dismiss='modal'>&times;</button>
+
+<h4 class='modal-title'>Change Password</h4>
+
+</div>
+
+<div class='modal-body'>
+
+<form action=''> 
+<label for='original'>Original:</label>
+<input type='text' id='original' name='orignal'><br><br>
+
+<label for='new'>New:</label>
+<input type='text' id='new' name='news'><br><br>
+
+<input type='submit' value='Submit'
+
+
+</form>
+
+<input type='button' value='Close' data-dismiss='modal'
+
+
+</div>
+
+
+</div>
+      
+</div>
+</div>
+  
+</div>
+
+
+
+
+"; 
+
+echo "
+
+<div class='container'>
+
+<!-- Modal -->
+<div class='modal fade' id='lastNameModal' role='dialog'>
+
+<div class='modal-dialog'>
+    
+<!-- Modal content-->
+
+<div class='modal-content'>
+
+<div class='modal-header'>
+
+<button type='button' class='close' data-dismiss='modal'>&times;</button>
+
+<h4 class='modal-title'>Change Last Name</h4>
+
+</div>
+
+<div class='modal-body'>
+
+<form action=''> 
+<label for='original'>Original:</label>
+<input type='text' id='original' name='orignal'><br><br>
+
+<label for='new'>New:</label>
+<input type='text' id='new' name='news'><br><br>
+
+<input type='submit' value='Submit'
+
+
+</form>
+
+<input type='button' value='Close' data-dismiss='modal'
+
+
+</div>
+
+
+</div>
+      
+</div>
+</div>
+  
+</div>
+
+
+
+
+"; 
+
+echo "
+
+<div class='container'>
+
+<!-- Modal -->
+<div class='modal fade' id='firstNameModal' role='dialog'>
+
+<div class='modal-dialog'>
+    
+<!-- Modal content-->
+
+<div class='modal-content'>
+
+<div class='modal-header'>
+
+<button type='button' class='close' data-dismiss='modal'>&times;</button>
+
+<h4 class='modal-title'>Change First Name</h4>
+
+</div>
+
+<div class='modal-body'>
+
+<form action=''> 
+<label for='original'>Original:</label>
+<input type='text' id='original' name='orignal'><br><br>
+
+<label for='new'>New:</label>
+<input type='text' id='new' name='news'><br><br>
+
+<input type='submit' value='Submit'
+
+
+</form>
+
+<input type='button' value='Close' data-dismiss='modal'
+
+
+</div>
+
+
+</div>
+      
+</div>
+</div>
+  
+</div>
+
+
+
+
+"; 
+
+echo "
+
+<div class='container'>
+
+<!-- Modal -->
+<div class='modal fade' id='emailModal' role='dialog'>
+
+<div class='modal-dialog'>
+    
+<!-- Modal content-->
+
+<div class='modal-content'>
+
+<div class='modal-header'>
+
+<button type='button' class='close' data-dismiss='modal'>&times;</button>
+
+<h4 class='modal-title'>Change Email</h4>
+
+</div>
+
+<div class='modal-body'>
+
+<form action=''> 
+<label for='original'>Original:</label>
+<input type='text' id='original' name='orignal'><br><br>
+
+<label for='new'>New:</label>
+<input type='text' id='new' name='news'><br><br>
+
+<input type='submit' value='Submit'
+
+
+</form>
+
+<input type='button' value='Close' data-dismiss='modal'
+
+
+</div>
+
+
+</div>
+      
+</div>
+</div>
+  
+</div>
+
+
+
+
+"; 
+
+echo "
+
+<div class='container'>
+
+<!-- Modal -->
+<div class='modal fade' id='phoneModal' role='dialog'>
+
+<div class='modal-dialog'>
+    
+<!-- Modal content-->
+
+<div class='modal-content'>
+
+<div class='modal-header'>
+
+<button type='button' class='close' data-dismiss='modal'>&times;</button>
+
+<h4 class='modal-title'>Change Phone Number</h4>
+
+</div>
+
+<div class='modal-body'>
+
+<form action=''> 
+<label for='original'>Original:</label>
+<input type='text' id='original' name='orignal'><br><br>
+
+<label for='new'>New:</label>
+<input type='text' id='new' name='news'><br><br>
+
+<input type='submit' value='Submit'
+
+
+</form>
+
+<input type='button' value='Close' data-dismiss='modal'
+
+
+</div>
+
+
+</div>
+      
+</div>
+</div>
+  
+</div>
+
+
+
+
+"; 
+
+
 ?>
 
