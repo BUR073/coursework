@@ -65,12 +65,14 @@ if (!isset($_SESSION['loggedin'])) {
 
 <div class='modal-body'>
 
-<form action='modalHandle.php' method='post'> 
-<label for='originalUsername'>Original:</label>
-<input type='text' id='originalUsername' name='orignalUsername'><br><br>
+<form action='modalHandle.php' method="post"> 
+<input type="hidden" id="type" name="type" value="Username">
+
+<label for='original'>Original:</label>
+<input type='text' id='original' name='original'><br><br>
 
 <label for='newUsername'>New:</label>
-<input type='text' id='newUsername' name='newUsername'><br><br>
+<input type='text' id='new' name='new'><br><br>
 
 <input type='submit' value='Submit'>
 
@@ -114,12 +116,13 @@ if (!isset($_SESSION['loggedin'])) {
 
 <div class='modal-body'>
 
-<form action=''> 
-<label for='originalPassword'>Original:</label>
-<input type='text' id='originalPassword' name='orignalPassword'><br><br>
+<form action='modalHandle.php' method='post'> 
+<input type="hidden" id="type" name="type" value="Password">
+<label for='original'>Original:</label>
+<input type='text' id='original' name='original'><br><br>
 
-<label for='newPassword'>New:</label>
-<input type='text' id='newPassword' name='newsPassword'><br><br>
+<label for='new'>New:</label>
+<input type='text' id='new' name='new'><br><br>
 
 <input type='submit' value='Submit'>
 
@@ -166,12 +169,13 @@ if (!isset($_SESSION['loggedin'])) {
 
 <div class='modal-body'>
 
-<form action=''> 
+<form action='modalHandle.php' method='post'> 
+<input type="hidden" id="type" name="type" value="LastName">
 <label for='original'>Original:</label>
-<input type='text' id='originallastName' name='orignallastName'><br><br>
+<input type='text' id='original' name='original'><br><br>
 
 <label for='new'>New:</label>
-<input type='text' id='newlastName' name='newlastName'><br><br>
+<input type='text' id='new' name='new'><br><br>
 
 <input type='submit' value='Submit'>
 
@@ -219,12 +223,13 @@ if (!isset($_SESSION['loggedin'])) {
 
 <div class='modal-body'>
 
-<form action=''> 
-<label for='originalfirstName'>Original:</label>
-<input type='text' id='originalfirstName' name='orignal'><br><br>
+<form action='modalHandle.php' method='post'> 
+<input type="hidden" id="type" name="type" value="FirstName">
+<label for='original'>Original:</label>
+<input type='text' id='original' name='original'><br><br>
 
-<label for='newfirstName'>New:</label>
-<input type='text' id='newfirstName' name='newsfirstName'><br><br>
+<label for='new'>New:</label>
+<input type='text' id='new' name='new'><br><br>
 
 <input type='submit' value='Submit'>
 
@@ -272,12 +277,13 @@ if (!isset($_SESSION['loggedin'])) {
 
 <div class='modal-body'>
 
-<form action=''> 
-<label for='originalEmail'>Original:</label>
-<input type='text' id='originalEmail' name='orignalEmail'><br><br>
+<form action='modalHandle.php' method='post'> 
+<input type="hidden" id="type" name="type" value="Email">
+<label for='original'>Original:</label>
+<input type='text' id='original' name='original'><br><br>
 
-<label for='newEmail'>New:</label>
-<input type='text' id='newEmail' name='newEmail'><br><br>
+<label for='new'>New:</label>
+<input type='text' id='new' name='new'><br><br>
 
 <input type='submit' value='Submit'>
 
@@ -327,12 +333,13 @@ if (!isset($_SESSION['loggedin'])) {
 
 <div class='modal-body'>
 
-<form action=''> 
-<label for='originalPhone'>Original:</label>
-<input type='text' id='originalPhone' name='orignalPhone'><br><br>
+<form action='modalHandle.php' method='post'> 
+<input type="hidden" id="type" name="type" value="Phone">
+<label for='original'>Original:</label>
+<input type='text' id='original' name='original'><br><br>
 
-<label for='newPhone'>New:</label>
-<input type='text' id='newPhone' name='newPhone'><br><br>
+<label for='new'>New:</label>
+<input type='text' id='new' name='new'><br><br>
 
 <input type='submit' value='Submit'>
 
@@ -360,6 +367,14 @@ if (!isset($_SESSION['loggedin'])) {
 </html>
 
 
+
+
+
+
+
+
+
+
 <?php
 ini_set('display_errors', 1);
 
@@ -367,7 +382,6 @@ ini_set('display_startup_errors', 1);
 
 error_reporting(E_ALL);
 // We need to use sessions, so you should always start sessions using the below code.
-
 
 $con=mysqli_connect("localhost","root","","phplogin");
 // Check connection
@@ -427,6 +441,7 @@ echo "</tr>";
 echo "<table>";
 
 mysqli_close($con);
+
 
 
 
