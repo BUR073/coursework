@@ -25,3 +25,8 @@ Text file to keep track of issues I have had
 - Allows multiple days worth of slots to be created
 - Currently does not work, no erros but creates 5 days worth of slots all with the same date value
 
+5. For handling forms indside modals
+- Paramaters can only be bound to variables within the WHERE clause of the statement
+- Must create many functions to do it instead 
+
+
