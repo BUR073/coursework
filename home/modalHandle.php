@@ -1,10 +1,8 @@
 <?php 
-// TODO: Username validation
-// TODO: Password validation 
-// TODO: Make sure values are different
-// TODO: Email validation
-//if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-	// exit('Email is not valid!');
+// TOOD: Check if values are already in use within db - Only for email, phone and username 
+// Email: Done
+// Phone: Done
+// Username: Done
 
 ini_set('display_errors', 1);
 
@@ -44,18 +42,344 @@ echo "Type: ", $type, "<br>";
 echo "Original: ", $original, "<br>";
 echo "New: ", $new, "<br>";
 
-compareDetails($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original); 
+// compareDetails($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original); 
+checkType($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original);
 
-function updateDetails($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original){
-    echo "Function: Update Details", "<br>"; 
+function updatePhone($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original){
+    echo "Function: Update Phone", "<br>"; 
 }; 
+
+function updatePassword($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original){
+    echo "Function: Update Password", "<br>"; 
+}; 
+
+function updateLastName($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original){
+    echo "Function: Update Last Name", "<br>"; 
+}; 
+
+function updateFirstName($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original){
+    echo "Function: Update First Name", "<br>"; 
+}; 
+
+function updateEmail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original){
+    echo "Function: Update Email", "<br>"; 
+}; 
+
+function updateUsername($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original){
+    echo "Function: Update Useranme", "<br>"; 
+}; 
+
+function checkPhoneUse($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original){
+    echo "Function: Check email use", "<br>"; 
+
+    $stmt = $con->prepare('SELECT `Phone` FROM `user` WHERE `Phone` = ?');
+		
+    $stmt->bind_param('s', $new);
+        
+    $stmt->execute();
+
+    $checkPhoneUse = ''; 
+
+    $stmt->bind_result($checkPhoneUse);
+
+    $stmt->fetch();
+
+    $stmt->close();
+
+    if ($checkPhoneUse == ''){
+        echo "Phone is not already in use by another user, proceed", "<br>";
+        updatePhone($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original);
+
+    } else {
+        echo "Phone is already in use by anoher user, do not proceed", "<br>"; 
+        
+    }
+
+};
+
+
+
+
+function comparePhone($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original){
+    echo "Function: Compare Phone", "<br>"; 
+
+    $different = compareDetails($new, $original); 
+
+    if ($different == '0'){
+        echo "Details must be different, do not proceed"; 
+    } else {
+
+        $UserId = $_SESSION['id']; 
+
+        $stmt = $con->prepare('SELECT `Phone` FROM `user` WHERE `Phone` = ? AND `UserId` = ?');
+		
+        $stmt->bind_param('si', $original, $UserId);
+            
+        $stmt->execute();
+    
+        $checkPhone = ''; 
+    
+        $stmt->bind_result($checkPhone);
+    
+        $stmt->fetch();
+    
+        $stmt->close();
+    
+        if ($checkPhone == ''){
+            echo "User's original phone number does not match, try again", "<br>";
+
+        } else {
+            echo "Phone number matches, proceed", "<br>"; 
+            checkPhoneUse($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original);
+        }
+    }
+}; 
+
+function compareFirstName($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original){
+    echo "Function: Compare First name", "<br>"; 
+
+    $different = compareDetails($new, $original); 
+
+    if ($different == '0'){
+        echo "Details must be different, do not proceed"; 
+    } else {
+
+        $UserId = $_SESSION['id']; 
+
+        $stmt = $con->prepare('SELECT `FirstName` FROM `user` WHERE `FirstName` = ? AND `UserId` = ?');
+		
+        $stmt->bind_param('si', $original, $UserId);
+            
+        $stmt->execute();
+    
+        $checkFirstName = ''; 
+    
+        $stmt->bind_result($checkFirstName);
+    
+        $stmt->fetch();
+    
+        $stmt->close();
+    
+        if ($checkFirstName == ''){
+            echo "User's original first name does not match, try again", "<br>";
+
+        } else {
+            echo "First name number matches, proceed", "<br>"; 
+            updateFirstName($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original);
+        }
+    }
+}; 
+
+function compareLastName($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original){
+    echo "Function: Compare Last Name", "<br>"; 
+
+    $different = compareDetails($new, $original); 
+
+    if ($different == '0'){
+        echo "Details must be different, do not proceed"; 
+    } else {
+
+        $UserId = $_SESSION['id']; 
+
+        $stmt = $con->prepare('SELECT `LastName` FROM `user` WHERE `LastName` = ? AND `UserId` = ?');
+		
+        $stmt->bind_param('si', $original, $UserId);
+            
+        $stmt->execute();
+    
+        $checkLastName = ''; 
+    
+        $stmt->bind_result($checkLastName);
+    
+        $stmt->fetch();
+    
+        $stmt->close();
+    
+        if ($checkLastName == ''){
+            echo "User's original last name does not match, try again", "<br>";
+
+        } else {
+            echo "Last name matches, proceed", "<br>"; 
+            updateLastName($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original);
+        }
+    }
+
+}; 
+
+function comparePassword($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original){
+    echo "Function: Compare Password", "<br>"; 
+
+    $different = compareDetails($new, $original); 
+
+    if ($different == '0'){
+        echo "Details must be different, do not proceed"; 
+    } else {
+
+        $UserId = $_SESSION['id']; 
+
+        $stmt = $con->prepare('SELECT `Password` FROM `user` WHERE `Password` = ? AND `UserId` = ?');
+		
+        $stmt->bind_param('si', $original, $UserId);
+            
+        $stmt->execute();
+    
+        $checkPassword = ''; 
+    
+        $stmt->bind_result($checkPassword);
+    
+        $stmt->fetch();
+    
+        $stmt->close();
+    
+        if ($checkPassword == ''){
+            echo "User's original password does not match, try again", "<br>";
+
+        } else {
+            echo "Password matches, proceed", "<br>"; 
+            updatePassword($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original);
+        }
+    }
+}; 
+
+function checkUsernameUse($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original){
+    echo "Function: Check username use", "<br>"; 
+
+    $stmt = $con->prepare('SELECT `Username` FROM `user` WHERE `Username` = ?');
+		
+    $stmt->bind_param('s', $new);
+        
+    $stmt->execute();
+
+    $checkUsernameUse = ''; 
+
+    $stmt->bind_result($checkUsernameUse);
+
+    $stmt->fetch();
+
+    $stmt->close();
+
+    if ($checkUsernameUse == ''){
+        echo "Username is not already in use by another user, proceed", "<br>";
+        updateUsername($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original);
+
+    } else {
+        echo "Username is already in use by anoher user, do not proceed", "<br>"; 
+        
+    }
+
+};
+
+
+function compareUsername($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original){
+    echo "Function: Compare Username", "<br>"; 
+
+    $different = compareDetails($new, $original); 
+
+    if ($different == '0'){
+        echo "Details must be different, do not proceed"; 
+    } else {
+
+        $UserId = $_SESSION['id']; 
+
+        $stmt = $con->prepare('SELECT `Username` FROM `user` WHERE `Username` = ? AND `UserId` = ?');
+		
+        $stmt->bind_param('si', $original, $UserId);
+            
+        $stmt->execute();
+    
+        $checkUsername = ''; 
+    
+        $stmt->bind_result($checkUsername);
+    
+        $stmt->fetch();
+    
+        $stmt->close();
+    
+        if ($checkUsername == ''){
+            echo "User's original username does not match, try again", "<br>";
+
+        } else {
+            echo "Username matches, proceed", "<br>"; 
+            checkUsernameUse($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original);
+        }
+    }
+
+}; 
+
+function checkEmailUse($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original){
+    echo "Function: Check email use", "<br>"; 
+
+    $stmt = $con->prepare('SELECT `Email` FROM `user` WHERE `Email` = ?');
+		
+    $stmt->bind_param('s', $new);
+        
+    $stmt->execute();
+
+    $checkEmailUse = ''; 
+
+    $stmt->bind_result($checkEmailUse);
+
+    $stmt->fetch();
+
+    $stmt->close();
+
+    if ($checkEmailUse == ''){
+        echo "Email is not already in use by another user, proceed", "<br>";
+        updateEmail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original);
+
+    } else {
+        echo "Email is already in use by anoher user, do not proceed", "<br>"; 
+        
+    }
+
+};
+
+
+
+
+function compareEmail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original){
+    echo "Function: Compare Username", "<br>"; 
+
+    $different = compareDetails($new, $original); 
+
+    if ($different == '0'){
+        echo "Details must be different, do not proceed"; 
+    } else {
+
+        $UserId = $_SESSION['id']; 
+
+        $stmt = $con->prepare('SELECT `Email` FROM `user` WHERE `Email` = ? AND `UserId` = ?');
+		
+        $stmt->bind_param('si', $original, $UserId);
+            
+        $stmt->execute();
+    
+        $checkEmail = ''; 
+    
+        $stmt->bind_result($checkEmail);
+    
+        $stmt->fetch();
+    
+        $stmt->close();
+    
+        if ($checkEmail == ''){
+            echo "User's original email does not match, try again", "<br>";
+
+        } else {
+            echo "Email matches, proceed", "<br>"; 
+            checkEmailUse($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original);
+        }
+    }
+}; 
+
 
 function validateUsername($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original){
     echo "Function: Validate Username", "<br>"; 
     if (preg_match('/^[a-zA-Z0-9]+$/', $new) == 0) {
         echo('Username is not valid!');
     } else {
-        updateDetails($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original); 
+        compareUsername($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original); 
+        // updateDetails($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original); 
     }; 
 }; 
 
@@ -64,7 +388,8 @@ function validatePassword($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATAB
     if (strlen($new) > 20 || strlen($new) < 5) {
         exit('Password must be between 5 and 20 characters long!');
     } else {
-        updateDetails($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original); 
+        comparePassword($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original); 
+        // updateDetails($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original); 
     }; 
 };
 
@@ -75,10 +400,11 @@ function validateEmail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE
     if (!filter_var($new, FILTER_VALIDATE_EMAIL)){
         exit('Email is not valid');
     } else {
-        updateDetails($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original);
+        compareEmail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original); 
+        // updateDetails($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original);
     }
 } 
-  
+
 
 
 function checkType($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original){
@@ -89,43 +415,22 @@ function checkType($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAM
         validatePassword($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original);
     } elseif ($type == 'Email') {
         validateEmail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original); 
-    } else {
-        updateDetails($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original); 
+    } elseif ($type == 'LastName') {
+        compareLastName($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original); 
+    } elseif ($type == 'FirstName') {
+        compareFirstName($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original); 
+    } elseif ($type == 'Phone') {
+        comparePhone($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original); 
     }
 }; 
 
-function checkOriginal($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original){
-    echo "Function: Check Original", "<br>"; 
-    $id = $_SESSION['id']; 
-    echo "UserID: ", $id,  "<br>"; 
-
-    $stmt = $con->prepare('SELECT ? FROM `User` WHERE ? = ? AND `UserId` = ?');
-
-    $stmt->bind_param('sssi', $type, $type, $original, $id);
-  
-    $stmt->execute();
-
-    $originalDb = ''; 
-
-    $stmt->bind_result($originalDb);
-
-    $stmt->fetch();
-
-    $stmt->close();
-
-    echo "Original detail from db: ", $originalDb, "<br>"; 
-
-    // checkType($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original); 
-}; 
-
-function compareDetails($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original){
+function compareDetails($new, $original){
     echo "Function: Compare Details", "<br>"; 
     if ($new == $original){
-        echo "Details cannot be the same, do not proceed", "<br>"; 
+
         return 0; 
     } else {
-        echo "Details are different, proceed", "<br>"; 
-        checkOriginal($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original); 
+
         return 1; 
     }; 
 }; 
