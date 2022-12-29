@@ -18,7 +18,7 @@ if (!isset($_SESSION['loggedin'])) {
 }
 
 $DATABASE_HOST = 'localhost';
-$DATABASE_USER = 'root';
+$DATABASE_USER = 'root'; 
 $DATABASE_PASS = '';
 $DATABASE_NAME = 'phplogin';
 // Try and connect using the info above.
@@ -29,7 +29,7 @@ if ( mysqli_connect_errno()) {
 }; 
 
 
-echo "Modal Handle", "<br>"; 
+// echo "Modal Handle", "<br>"; 
 $type = ''; 
 $original = ''; 
 $new = ''; 
@@ -38,16 +38,16 @@ $type = $_POST['type'];
 $original = $_POST['original'];
 $new = $_POST['new']; 
 
-echo "Type: ", $type, "<br>";
-echo "Original: ", $original, "<br>";
-echo "New: ", $new, "<br>";
+// echo "Type: ", $type, "<br>";
+// echo "Original: ", $original, "<br>";
+// echo "New: ", $new, "<br>";
 
 // compareDetails($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original); 
 $UserId = $_SESSION['id']; 
 checkType($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId);
 
 function updatePhone($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId){
-    echo "Function: Update Phone", "<br>"; 
+
 
     $stmt = $con->prepare("UPDATE `User` SET `Phone`= ? WHERE `Phone` = ? AND `UserId` = ?");
 		
@@ -61,7 +61,7 @@ function updatePhone($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_N
 }; 
 
 function updatePassword($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId){
-    echo "Function: Update Password", "<br>"; 
+
 
     $stmt = $con->prepare("UPDATE `User` SET `Password`= ? WHERE `Password` = ? AND `UserId` = ?");
 		
@@ -76,7 +76,7 @@ function updatePassword($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABAS
 }; 
 
 function updateLastName($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId){
-    echo "Function: Update Last Name", "<br>"; 
+  
 
     $stmt = $con->prepare("UPDATE `User` SET `LastName`= ? WHERE `LastName` = ? AND `UserId` = ?");
 		
@@ -90,7 +90,7 @@ function updateLastName($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABAS
 }; 
 
 function updateFirstName($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId){
-    echo "Function: Update First Name", "<br>"; 
+ 
 
     $stmt = $con->prepare("UPDATE `User` SET `FirstName`= ? WHERE `FirstName` = ? AND `UserId` = ?");
 		
@@ -105,7 +105,7 @@ function updateFirstName($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABA
 }; 
 
 function updateEmail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId){
-    echo "Function: Update Email", "<br>"; 
+
 
     $stmt = $con->prepare("UPDATE `User` SET `Email`= ? WHERE `Email` = ? AND `UserId` = ?");
 		
@@ -120,7 +120,7 @@ function updateEmail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_N
 }; 
 
 function updateUsername($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId){
-    echo "Function: Update Useranme", "<br>"; 
+
 
     $stmt = $con->prepare("UPDATE `User` SET `Username`= ? WHERE `Username` = ? AND `UserId` = ?");
 		
@@ -135,7 +135,6 @@ function updateUsername($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABAS
 }; 
 
 function checkPhoneUse($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId){
-    echo "Function: Check email use", "<br>"; 
 
     $stmt = $con->prepare('SELECT `Phone` FROM `user` WHERE `Phone` = ?');
 		
@@ -152,11 +151,11 @@ function checkPhoneUse($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE
     $stmt->close();
 
     if ($checkPhoneUse == ''){
-        echo "Phone is not already in use by another user, proceed", "<br>";
+
         updatePhone($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId);
 
     } else {
-        echo "Phone is already in use by anoher user, do not proceed", "<br>"; 
+        echo "<script>alert('Phone number is not valid');document.location='profile.php'</script>";
         
     }
 
@@ -166,12 +165,12 @@ function checkPhoneUse($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE
 
 
 function comparePhone($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId){
-    echo "Function: Compare Phone", "<br>"; 
+   
 
     $different = compareDetails($new, $original); 
 
     if ($different == '0'){
-        echo "Details must be different, do not proceed"; 
+        echo "<script>alert('Details must be different');document.location='profile.php'</script>";
     } else {
 
         $stmt = $con->prepare('SELECT `Phone` FROM `user` WHERE `Phone` = ? AND `UserId` = ?');
@@ -189,22 +188,22 @@ function comparePhone($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_
         $stmt->close();
     
         if ($checkPhone == ''){
-            echo "User's original phone number does not match, try again", "<br>";
+            echo "<script>alert('Original phone number does not match);document.location='profile.php'</script>";
 
         } else {
-            echo "Phone number matches, proceed", "<br>"; 
+       
             checkPhoneUse($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId);
         }
     }
 }; 
 
 function compareFirstName($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId){
-    echo "Function: Compare First name", "<br>"; 
+
 
     $different = compareDetails($new, $original); 
 
     if ($different == '0'){
-        echo "Details must be different, do not proceed"; 
+        echo "<script>alert('Details must be different');document.location='profile.php'</script>";
     } else {
 
         $stmt = $con->prepare('SELECT `FirstName` FROM `user` WHERE `FirstName` = ? AND `UserId` = ?');
@@ -222,22 +221,22 @@ function compareFirstName($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATAB
         $stmt->close();
     
         if ($checkFirstName == ''){
-            echo "User's original first name does not match, try again", "<br>";
+            echo "<script>alert('Original first name does not match');document.location='profile.php'</script>";
 
         } else {
-            echo "First name number matches, proceed", "<br>"; 
+         
             updateFirstName($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId);
         }
     }
 }; 
 
 function compareLastName($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId){
-    echo "Function: Compare Last Name", "<br>"; 
+   
 
     $different = compareDetails($new, $original); 
 
     if ($different == '0'){
-        echo "Details must be different, do not proceed"; 
+        echo "<script>alert('Details must be different');document.location='profile.php'</script>";
     } else {
 
         $stmt = $con->prepare('SELECT `LastName` FROM `user` WHERE `LastName` = ? AND `UserId` = ?');
@@ -255,10 +254,10 @@ function compareLastName($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABA
         $stmt->close();
     
         if ($checkLastName == ''){
-            echo "User's original last name does not match, try again", "<br>";
+            echo "<script>alert('Users original last name does not match');document.location='profile.php'</script>";
 
         } else {
-            echo "Last name matches, proceed", "<br>"; 
+          
             updateLastName($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId);
         }
     }
@@ -266,12 +265,12 @@ function compareLastName($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABA
 }; 
 
 function comparePassword($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId){
-    echo "Function: Compare Password", "<br>"; 
+  
 
     $different = compareDetails($new, $original); 
 
     if ($different == '0'){
-        echo "Details must be different, do not proceed"; 
+        echo "<script>alert('Details must be different);document.location='profile.php'</script>";
     } else {
 
         $stmt = $con->prepare('SELECT `Password` FROM `user` WHERE `Password` = ? AND `UserId` = ?');
@@ -289,17 +288,17 @@ function comparePassword($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABA
         $stmt->close();
     
         if ($checkPassword == ''){
-            echo "User's original password does not match, try again", "<br>";
+            echo "<script>alert('Original password does not match');document.location='profile.php'</script>";
 
         } else {
-            echo "Password matches, proceed", "<br>"; 
+
             updatePassword($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId);
         }
     }
 }; 
 
 function checkUsernameUse($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId){
-    echo "Function: Check username use", "<br>"; 
+  
 
     $stmt = $con->prepare('SELECT `Username` FROM `user` WHERE `Username` = ?');
 		
@@ -316,11 +315,11 @@ function checkUsernameUse($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATAB
     $stmt->close();
 
     if ($checkUsernameUse == ''){
-        echo "Username is not already in use by another user, proceed", "<br>";
+ 
         updateUsername($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId);
 
     } else {
-        echo "Username is already in use by anoher user, do not proceed", "<br>"; 
+        echo "<script>alert('Username is not valid');document.location='profile.php'</script>";
         
     }
 
@@ -328,12 +327,12 @@ function checkUsernameUse($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATAB
 
 
 function compareUsername($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId){
-    echo "Function: Compare Username", "<br>"; 
+
 
     $different = compareDetails($new, $original); 
 
     if ($different == '0'){
-        echo "Details must be different, do not proceed"; 
+        echo "<script>alert('Details must be different');document.location='profile.php'</script>";
     } else {
 
         $stmt = $con->prepare('SELECT `Username` FROM `user` WHERE `Username` = ? AND `UserId` = ?');
@@ -351,10 +350,10 @@ function compareUsername($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABA
         $stmt->close();
     
         if ($checkUsername == ''){
-            echo "User's original username does not match, try again", "<br>";
+            echo "<script>alert('Original username does not match);document.location='profile.php'</script>";
 
         } else {
-            echo "Username matches, proceed", "<br>"; 
+    
             checkUsernameUse($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId);
         }
     }
@@ -362,7 +361,7 @@ function compareUsername($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABA
 }; 
 
 function checkEmailUse($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId){
-    echo "Function: Check email use", "<br>"; 
+
 
     $stmt = $con->prepare('SELECT `Email` FROM `user` WHERE `Email` = ?');
 		
@@ -379,11 +378,11 @@ function checkEmailUse($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE
     $stmt->close();
 
     if ($checkEmailUse == ''){
-        echo "Email is not already in use by another user, proceed", "<br>";
+    
         updateEmail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId);
 
     } else {
-        echo "Email is already in use by anoher user, do not proceed", "<br>"; 
+        echo "<script>alert('Email is not valid);document.location='profile.php'</script>";
         
     }
 
@@ -393,12 +392,12 @@ function checkEmailUse($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE
 
 
 function compareEmail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId){
-    echo "Function: Compare Username", "<br>"; 
+  
 
     $different = compareDetails($new, $original); 
 
     if ($different == '0'){
-        echo "Details must be different, do not proceed"; 
+        echo "<script>alert('Details must be different');document.location='profile.php'</script>";
     } else {
 
         $stmt = $con->prepare('SELECT `Email` FROM `user` WHERE `Email` = ? AND `UserId` = ?');
@@ -416,10 +415,10 @@ function compareEmail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_
         $stmt->close();
     
         if ($checkEmail == ''){
-            echo "User's original email does not match, try again", "<br>";
+            echo "<script>alert('Original email does not match');document.location='profile.php'</script>";
 
         } else {
-            echo "Email matches, proceed", "<br>"; 
+          
             checkEmailUse($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId);
         }
     }
@@ -427,9 +426,9 @@ function compareEmail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_
 
 
 function validateUsername($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId){
-    echo "Function: Validate Username", "<br>"; 
+  
     if (preg_match('/^[a-zA-Z0-9]+$/', $new) == 0) {
-        echo('Username is not valid!');
+        echo "<script>alert('Username is not valid');document.location='profile.php'</script>";
     } else {
         compareUsername($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId); 
         // updateDetails($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original); 
@@ -437,9 +436,9 @@ function validateUsername($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATAB
 }; 
 
 function validatePassword($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId){
-    echo "Function: Validate Password", "<br>"; 
+
     if (strlen($new) > 20 || strlen($new) < 5) {
-        exit('Password must be between 5 and 20 characters long!');
+        echo "<script>alert('Password must be between 5 and 20 characters long');document.location='profile.php'</script>";
     } else {
         comparePassword($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId); 
         // updateDetails($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original); 
@@ -449,9 +448,9 @@ function validatePassword($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATAB
 
 
 function validateEmail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId){
-    echo "Function: Validate Email", "<br>"; 
+    
     if (!filter_var($new, FILTER_VALIDATE_EMAIL)){
-        exit('Email is not valid');
+        echo "<script>alert('Email is not valid');document.location='profile.php'</script>";
     } else {
         compareEmail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId); 
         // updateDetails($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original);
@@ -461,7 +460,7 @@ function validateEmail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE
 
 
 function checkType($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId){
-    echo "Function: Check Type", "<br>"; 
+
     if ($type == 'Username'){
         validateUsername($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $new, $original, $UserId);
     } elseif ($type == 'Password') {
@@ -478,9 +477,8 @@ function checkType($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAM
 }; 
 
 function compareDetails($new, $original){
-    echo "Function: Compare Details", "<br>"; 
     if ($new == $original){
-
+        echo "<script>alert('Details cannot be the same');document.location='profile.php'</script>";
         return 0; 
     } else {
 
