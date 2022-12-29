@@ -29,4 +29,8 @@ Text file to keep track of issues I have had
 - Paramaters can only be bound to variables within the WHERE clause of the statement
 - Must create many functions to do it instead 
 
+6. Minor bugs with modalHandle.php alerts
+- Some times alert for details being the same are not shown
+- Need to work out later
+
 

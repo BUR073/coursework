@@ -1,8 +1,6 @@
 <?php 
-// TOOD: Check if values are already in use within db - Only for email, phone and username 
-// Email: Done
-// Phone: Done
-// Username: Done
+// TOOD: Bug fixes surrounding alert statmenets
+// So far, notabley the alert for if the values are the same
 
 ini_set('display_errors', 1);
 
