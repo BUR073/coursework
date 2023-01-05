@@ -1,6 +1,6 @@
 1. Form is submitted by user
 
-2. Check the users membership - make sure they are allowed to book a cardio slot or gym slot or both 
+2. Check the users membership - make sure they are allowed to book a cardio slot or gym slot or both - Complete
 
 3. Create function that find slots that match the vars from the form
 

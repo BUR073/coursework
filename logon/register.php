@@ -64,7 +64,7 @@ function newId($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $
 // told to the user for privacy and security reasons 
 
 function returnToRegister(){
-	echo "returnToBooking", "<br>"; 
+
 	echo "<script>alert('Sorry, the details you have entered are already in use. Please try another one');document.location='register.html'</script>";
 }
 
@@ -89,10 +89,10 @@ function checkEmail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NA
     $stmt->close();
 
 	if ($checkEmailParam == ''){
-		echo "Email is not already in use... proceed", "<br>";
+
 		return 1; 
 	} else {
-		echo "Email is already in use.. do not proceed", "<br>"; 
+		echo "<script>alert('Email address is not valid');document.location='index.php'</script>";
 		$message = ''; 
 		$message = 'Email'; 
 		returnToRegister(); 
@@ -121,10 +121,10 @@ function checkPhone($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NA
     $stmt->close();
 
 	if ($checkPhoneParam == ''){
-		echo "Phone Number is not already in use... proceed", "<br>";
+
 		return 1; 
 	} else {
-		echo "Phone number is already in use.. do not proceed", "<br>"; 
+		echo "<script>alert('Phone number is not valid');document.location='index.php'</script>";
 		$message = ''; 
 		$message = 'Phone Number'; 
 		returnToRegister($message); 
@@ -154,10 +154,10 @@ function checkUsername($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE
     $stmt->close();
 
 	if ($checkUsernameParam == ''){
-		echo "Username is not already in use... proceed", "<br>";
+
 		return 1; 
 	} else {
-		echo "Username is already in use.. do not proceed", "<br>"; 
+		echo "<script>alert('Username is not valid');document.location='index.php'</script>";
 		$message = ''; 
 		$message = 'Phone Number'; 
 		returnToRegister($message); 
@@ -191,7 +191,7 @@ function insertVar($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAM
 
     $stmt->close();
 
-	echo "Account created"; 
+	returnToLogin(); 
 
 }
 
@@ -210,27 +210,16 @@ function collectVar($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NA
 	$lastName = $_POST['lastName']; 
 	$phone = $_POST['phone']; 
 
-	echo "Username: ", $username, "<br>"; 
-	echo "Password: ", $password, "<br>"; 
-	echo "Email: ", $email, "<br>"; 
-	echo "First Name: ", $firstName, "<br>"; 
-	echo "Last Name: ", $lastName, "<br>"; 
-	echo "Phone: ", $phone, "<br>"; 
-
 	$userId = newId($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con); 
 
 	$checkUsername = checkUsername($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $username);
 	$checkPhone = checkPhone($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $phone);
 	$checkEmail = checkEmail($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $email);
 
-	echo "checkUsername: ", $checkUsername, "<br>"; 
-	echo "checkPhone: ", $checkPhone, "<br>"; 
-	echo "checkEmail: ", $checkEmail, "<br>"; 
-
 	if ($checkUsername == 1){
 		if ($checkPhone == 1 ){
 			if ($checkEmail == 1){
-				echo "Username, Phone and Email all unique... proceed";
+		
 				insertVar($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $userId, $firstName, $lastName, $phone, $email, $username, $password); 
 			}
 			
