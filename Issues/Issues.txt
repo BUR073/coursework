@@ -33,4 +33,10 @@ Text file to keep track of issues I have had
 - Some times alert for details being the same are not shown
 - Need to work out later
 
+7. PHP date() function stores time in a string format
+- This cannot be compared using '<' and '>'
+- Need to user strtotime() to convert the string 
+- This allows dates to be comparable
+- Issue from bookingBackend.php data comparison in the membership validation 
+
 
