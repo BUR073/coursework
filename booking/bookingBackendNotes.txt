@@ -1,0 +1,11 @@
+1. Form is submitted by user
+
+2. Check the users membership - make sure they are allowed to book a cardio slot or gym slot or both 
+
+3. Create function that find slots that match the vars from the form
+
+4. Check the slot is a valid slot (Number of users, etc)
+
+5. Check the user is not already booked into the slot they are trying to book 
+
+6. Insert values into Db to confirm booking
