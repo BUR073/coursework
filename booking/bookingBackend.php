@@ -28,10 +28,45 @@ if ( mysqli_connect_errno() ) {
 }
 
 function findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type){
+    echo "<br>";
     echo "Function: findSlot", "<br>";
+    echo "<br>";
+
+    $dateRequested = $_POST['date']; 
+    $timeStart = $_POST['timeStart']; 
+    $timeEnd = $_POST['timeEnd']; 
+
+    echo "Date requested: ", $dateRequested, "<br>";
+    echo "Time start: ", $timeStart, "<br>"; 
+    echo "Time end: ", $timeEnd, "<br>"; 
+
+
+    $stmt = $con->prepare('SELECT `SlotId`, `NumberUsers` FROM `Slot` WHERE `TimeStart` = ? AND `TimeFinish` = ? AND `Date` = ? ');
+    $stmt->bind_param('sss', $timeStart, $timeEnd, $dateRequested);
+            
+    $stmt->execute();
+
+    $slotId = ''; 
+    $numberUsers = ''; 
+
+    $stmt->bind_result($slotId, $numberUsers);
+
+    $stmt->fetch();
+
+    $stmt->close();
+
+    if ($slotId != ''){
+        echo "Slot Found", "<br>"; 
+        echo "Slot Id: ", $slotId, "<br>";
+        echo "Number of users: ", $numberUsers, "<br>";   
+    } else {
+        echo "Slot not found", "<br>"; 
+    }
 }; 
 
 function checkMembership($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type){
+    echo "Function: checkMembership", "<br>";
+    echo "<br>";
     $userId = $_SESSION['id'];
     echo "UserId: ", $userId, "<br>"; 
     // Get user Id from session variable
@@ -77,7 +112,9 @@ function checkMembership($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABA
     if ($type == 'cardio' && $Cardio == '1'){
         echo "Membership is valid for type requested", "<br>"; 
         if (strtotime($currentDate) < strtotime($MemberEndDate)){
+            echo "Date is valid", "<br>";
             findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type);
+           
         } elseif (strtotime($currentDate) > strtotime($MemberEndDate)){
             // echo "<script>alert('Your membership is not valid to access the cardio gym');document.location='booking.html'</script>";
             echo "You membership is not valid to access the cardio gym", "<br>";
@@ -87,7 +124,9 @@ function checkMembership($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABA
     } elseif ($type == 'weights' && $Gym == '1'){
         echo "Membership is valid for type requested", "<br>"; 
         if (strtotime($currentDate) < strtotime($MemberEndDate)){
+            echo "Date is valid", "<br>";
             findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type);
+            
         } elseif (strtotime($currentDate) > strtotime($MemberEndDate)){
             // echo "<script>alert('Your membership is not valid to access the weights gym');document.location='booking.html'</script>";
             echo "You membership is not valid to access the weights gym", "<br>";
