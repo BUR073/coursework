@@ -27,6 +27,10 @@ if ( mysqli_connect_errno() ) {
     
 }
 
+function findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type){
+    echo "Function: findSlot", "<br>";
+}; 
+
 function checkMembership($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type){
     $userId = $_SESSION['id'];
     echo "UserId: ", $userId, "<br>"; 
@@ -67,15 +71,32 @@ function checkMembership($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABA
     echo 'Cardio: ', $Cardio, "<br>"; 
     echo 'Type: ', $type, "<br>"; 
 
+    $currentDate = date("Y/m/d");
+    echo "Today's date: ", $currentDate, "<br>"; 
+
     if ($type == 'cardio' && $Cardio == '1'){
-        echo "Membership is valid for type requested"; 
-        return 1; 
+        echo "Membership is valid for type requested", "<br>"; 
+        if (strtotime($currentDate) < strtotime($MemberEndDate)){
+            findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type);
+        } elseif (strtotime($currentDate) > strtotime($MemberEndDate)){
+            // echo "<script>alert('Your membership is not valid to access the cardio gym');document.location='booking.html'</script>";
+            echo "You membership is not valid to access the cardio gym", "<br>";
+        }
+        
+
     } elseif ($type == 'weights' && $Gym == '1'){
-        echo "Membership is valid for type requested";
-        return 1; 
+        echo "Membership is valid for type requested", "<br>"; 
+        if (strtotime($currentDate) < strtotime($MemberEndDate)){
+            findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type);
+        } elseif (strtotime($currentDate) > strtotime($MemberEndDate)){
+            // echo "<script>alert('Your membership is not valid to access the weights gym');document.location='booking.html'</script>";
+            echo "You membership is not valid to access the weights gym", "<br>";
+        }
+ 
     } else {
-        echo "Membership is not valid for type requested"; 
-        return 0; 
+        // echo "<script>alert('Your membership is not valid');document.location='booking.html'</script>";
+        echo "You membership is not valid", "<br>";
+
     }
 
 

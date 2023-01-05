@@ -9,3 +9,5 @@
 5. Check the user is not already booked into the slot they are trying to book 
 
 6. Insert values into Db to confirm booking
+
+Need to work out date system for memberships - delete from table when finished or something else? 
