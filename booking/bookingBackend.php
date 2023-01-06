@@ -97,6 +97,7 @@ function book($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $c
     $stmt->close(); 
 
     echo "Updated slot", "<br>"; 
+    echo "<script>alert('Gym session booked');document.location='booking.html'</script>";
 }; 
 
 function checkBooking($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $slotId, $userId){
@@ -121,7 +122,7 @@ function checkBooking($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_
         echo "User is not already booked into this slot", "<br>";
         book($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $slotId, $userId); 
     } else {
-        echo "User is already booked into this slot", "<br>"; 
+        echo "<script>alert('You cannot book the same slot more than once');document.location='booking.html'</script>";
     }; 
 }; 
 function convertTypeBool($type){
@@ -175,11 +176,11 @@ function findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME
         if ($numberUsers < 20){
             checkBooking($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $slotId, $userId);
         } else {
-            echo "Slot is full", "<br>"; 
+            echo "<script>alert('Sorry, this session is fully booked');document.location='booking.html'</script>"; 
         }
            
     } else {
-        echo "Slot not found", "<br>"; 
+        echo "<script>alert('Session not found, please refer to the timetable');document.location='booking.html'</script>";
     }
 }; 
 
@@ -236,7 +237,7 @@ function checkMembership($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABA
            
         } elseif (strtotime($currentDate) > strtotime($MemberEndDate)){
             // echo "<script>alert('Your membership is not valid to access the cardio gym');document.location='booking.html'</script>";
-            echo "You membership is not valid to access the cardio gym", "<br>";
+            echo "<script>alert('Your membership is not valid to book a session in the cardio gym');document.location='booking.html'</script>";
         }
         
 
@@ -248,12 +249,12 @@ function checkMembership($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABA
             
         } elseif (strtotime($currentDate) > strtotime($MemberEndDate)){
             // echo "<script>alert('Your membership is not valid to access the weights gym');document.location='booking.html'</script>";
-            echo "You membership is not valid to access the weights gym", "<br>";
+            echo "<script>alert('Your membership is not valid to access the weights gym');document.location='booking.html'</script>";
         }
  
     } else {
         // echo "<script>alert('Your membership is not valid');document.location='booking.html'</script>";
-        echo "You membership is not valid", "<br>";
+        echo "<script>alert('Your membership is not valid');document.location='booking.html'</script>";
 
     }
 
