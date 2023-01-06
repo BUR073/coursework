@@ -28,9 +28,7 @@ if ( mysqli_connect_errno() ) {
 }
 
 function newOrderId($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con){
-    echo "<br>";
-    echo "Function: newOrderId", "<br>";
-    echo "<br>";
+
     $stmt = $con->prepare('SELECT MAX(OrderId) FROM `Order`');
   
     $stmt->execute();
@@ -49,9 +47,7 @@ function newOrderId($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NA
 };
 
 function newNumberUsers($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $slotId){
-    echo "<br>";
-    echo "Function: newNumberUsers", "<br>";
-    echo "<br>";
+  
 
     $stmt = $con->prepare('SELECT MAX(NumberUsers) FROM `Slot` WHERE `SlotId` = ?');
 
@@ -73,40 +69,32 @@ function newNumberUsers($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABAS
 };
 
 function book($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $slotId, $userId){
-    echo "<br>";
-    echo "Function: book", "<br>";
-    echo "<br>";
+   
 
     $orderId = newOrderId($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con); 
 
-    echo "New OrderId: ", $orderId, "<br>"; 
+
     $notes = ''; 
 
     $stmt = $con->prepare('INSERT INTO `Order`(`OrderId`, `UserId`, `Notes`, `SlotId`) VALUES (?, ?, ?, ?)');
     $stmt->bind_param('ssss', $orderId, $userId, $notes, $slotId); 
     $stmt->execute(); 
 
-    echo "Inserted into Order", "<br>"; 
+
 
     $numberUsers = newNumberUsers($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $slotId); 
-    echo "New Number of users: ", $numberUsers, "<br>"; 
+
 
     $stmt = $con->prepare('UPDATE `Slot` SET `NumberUsers`= ?  WHERE `SlotId` = ?');
     $stmt->bind_param('ss', $numberUsers, $slotId); 
     $stmt->execute(); 
     $stmt->close(); 
 
-    echo "Updated slot", "<br>"; 
+
     echo "<script>alert('Gym session booked');document.location='booking.html'</script>";
 }; 
 
 function checkBooking($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $slotId, $userId){
-    echo "<br>";
-    echo "Function: checkBooking", "<br>";
-    echo "<br>";
-
-    echo "SlotId: ", $slotId, "<br>"; 
-    echo "userId: ", $userId, "<br>"; 
     
     $stmt = $con->prepare('SELECT `OrderId` FROM `Order` WHERE `UserId` = ? AND `SlotId` = ?');
     $stmt->bind_param('ss', $userId, $slotId ); 
@@ -116,10 +104,8 @@ function checkBooking($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_
     $stmt->fetch(); 
     $stmt->close(); 
 
-    echo "OrderId: ", $orderId, "<br>"; 
 
     if ($orderId == ''){
-        echo "User is not already booked into this slot", "<br>";
         book($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $slotId, $userId); 
     } else {
         echo "<script>alert('You cannot book the same slot more than once');document.location='booking.html'</script>";
@@ -137,18 +123,12 @@ function findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME
     // 0 - Cardio
     // 1 - weights
 
-    echo "<br>";
-    echo "Function: findSlot", "<br>";
-    echo "<br>";
 
     $dateRequested = $_POST['date']; 
     $timeStart = $_POST['timeStart']; 
     $timeEnd = $_POST['timeEnd']; 
     $type = convertTypeBool($type); 
-    echo "Converted Boolean Type: ", $type, "<br>"; 
-    echo "Date requested: ", $dateRequested, "<br>";
-    echo "Time start: ", $timeStart, "<br>"; 
-    echo "Time end: ", $timeEnd, "<br>"; 
+
 
 
     $stmt = $con->prepare('SELECT `SlotId`, `NumberUsers` FROM `Slot` WHERE `TimeStart` = ? AND `TimeFinish` = ? AND `Date` = ? AND `Type` = ?');
@@ -166,12 +146,8 @@ function findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME
 
     $stmt->close();
 
-    echo "Number of Users: ", $numberUsers, "<br>"; 
 
     if ($slotId != ''){
-        echo "Slot Found", "<br>"; 
-        echo "Slot Id: ", $slotId, "<br>";
-        echo "Number of users: ", $numberUsers, "<br>";   
         
         if ($numberUsers < 20){
             checkBooking($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $slotId, $userId);
@@ -185,10 +161,9 @@ function findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME
 }; 
 
 function checkMembership($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type){
-    echo "Function: checkMembership", "<br>";
-    echo "<br>";
+
     $userId = $_SESSION['id'];
-    echo "UserId: ", $userId, "<br>"; 
+
     // Get user Id from session variable
 
     $MemberShipId = ''; 
@@ -209,7 +184,7 @@ function checkMembership($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABA
     $stmt->bind_result($MemberShipId); 
     $stmt->fetch(); 
 
-    echo $MemberShipId, "<br>"; 
+
 
     $stmt = $con->prepare('SELECT `StartDate`, `EndDate`,`Gym`, `Cardio` FROM `MembershipCore` INNER JOIN `MemberShipType` ON `MemberShipCore`.`MemberShipId` = `MemberShipType`.`MemberShipId` WHERE `MemberShipCore`.`MemberShipId` = ? ORDER BY StartDate;');
     $stmt->bind_param('s', $MemberShipId);
@@ -220,40 +195,34 @@ function checkMembership($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABA
 
     $stmt->fetch();
 
-    echo "MemberStartDate: ", $MemberStartDate, "<br>"; 
-    echo "MemberEndDate", $MemberEndDate, "<br>"; 
-    echo "Gym: ", $Gym, "<br>"; 
-    echo 'Cardio: ', $Cardio, "<br>"; 
-    echo 'Type: ', $type, "<br>"; 
 
     $currentDate = date("Y/m/d");
-    echo "Today's date: ", $currentDate, "<br>"; 
+
 
     if ($type == 'cardio' && $Cardio == '1'){
-        echo "Membership is valid for type requested", "<br>"; 
+   
         if (strtotime($currentDate) < strtotime($MemberEndDate)){
-            echo "Date is valid", "<br>";
+
             findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $userId);
            
         } elseif (strtotime($currentDate) > strtotime($MemberEndDate)){
-            // echo "<script>alert('Your membership is not valid to access the cardio gym');document.location='booking.html'</script>";
             echo "<script>alert('Your membership is not valid to book a session in the cardio gym');document.location='booking.html'</script>";
         }
         
 
     } elseif ($type == 'weights' && $Gym == '1'){
-        echo "Membership is valid for type requested", "<br>"; 
+
         if (strtotime($currentDate) < strtotime($MemberEndDate)){
-            echo "Date is valid", "<br>";
+  
             findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $userId);
             
         } elseif (strtotime($currentDate) > strtotime($MemberEndDate)){
-            // echo "<script>alert('Your membership is not valid to access the weights gym');document.location='booking.html'</script>";
+
             echo "<script>alert('Your membership is not valid to access the weights gym');document.location='booking.html'</script>";
         }
  
     } else {
-        // echo "<script>alert('Your membership is not valid');document.location='booking.html'</script>";
+       
         echo "<script>alert('Your membership is not valid');document.location='booking.html'</script>";
 
     }
