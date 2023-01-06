@@ -4,9 +4,9 @@
 
 3. Create function that find slots that match the vars from the form - Complete
 
-4. Check the slot is a valid slot (Number of users, etc)
+4. Check the slot is a valid slot (Number of users, etc) - Complete
 
-5. Check the user is not already booked into the slot they are trying to book 
+5. Check the user is not already booked into the slot they are trying to book - Complete
 
 6. Insert values into Db to confirm booking
 

@@ -27,7 +27,105 @@ if ( mysqli_connect_errno() ) {
     
 }
 
-function findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type){
+function newOrderId($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con){
+    echo "<br>";
+    echo "Function: newOrderId", "<br>";
+    echo "<br>";
+    $stmt = $con->prepare('SELECT MAX(OrderId) FROM `Order`');
+  
+    $stmt->execute();
+
+    $newId = ''; 
+
+    $stmt->bind_result($newId);
+
+    $stmt->fetch();
+
+    $stmt->close();
+
+    $newId++; 
+
+    return $newId; 
+};
+
+function newNumberUsers($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $slotId){
+    echo "<br>";
+    echo "Function: newNumberUsers", "<br>";
+    echo "<br>";
+
+    $stmt = $con->prepare('SELECT MAX(NumberUsers) FROM `Slot` WHERE `SlotId` = ?');
+
+    $stmt->bind_param('s',$slotId); 
+  
+    $stmt->execute();
+
+    $newId = ''; 
+
+    $stmt->bind_result($newId);
+
+    $stmt->fetch();
+
+    $stmt->close();
+
+    $newId++; 
+
+    return $newId; 
+};
+
+function book($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $slotId, $userId){
+    echo "<br>";
+    echo "Function: book", "<br>";
+    echo "<br>";
+
+    $orderId = newOrderId($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con); 
+
+    echo "New OrderId: ", $orderId, "<br>"; 
+    $notes = ''; 
+
+    $stmt = $con->prepare('INSERT INTO `Order`(`OrderId`, `UserId`, `Notes`, `SlotId`) VALUES (?, ?, ?, ?)');
+    $stmt->bind_param('ssss', $orderId, $userId, $notes, $slotId); 
+    $stmt->execute(); 
+
+    echo "Inserted into Order", "<br>"; 
+
+    $numberUsers = newNumberUsers($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $slotId); 
+    echo "New Number of users: ", $numberUsers, "<br>"; 
+
+    $stmt = $con->prepare('UPDATE `Slot` SET `NumberUsers`= ?  WHERE `SlotId` = ?');
+    $stmt->bind_param('ss', $numberUsers, $slotId); 
+    $stmt->execute(); 
+    $stmt->close(); 
+
+    echo "Updated slot", "<br>"; 
+}; 
+
+function checkBooking($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $slotId, $userId){
+    echo "<br>";
+    echo "Function: checkBooking", "<br>";
+    echo "<br>";
+
+    echo "SlotId: ", $slotId, "<br>"; 
+    echo "userId: ", $userId, "<br>"; 
+    
+    $stmt = $con->prepare('SELECT `OrderId` FROM `Order` WHERE `UserId` = ? AND `SlotId` = ?');
+    $stmt->bind_param('ss', $userId, $slotId ); 
+    $stmt->execute(); 
+    $orderId = ''; 
+    $stmt->bind_result($orderId); 
+    $stmt->fetch(); 
+    $stmt->close(); 
+
+    echo "OrderId: ", $orderId, "<br>"; 
+
+    if ($orderId == ''){
+        echo "User is not already booked into this slot", "<br>";
+        book($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $slotId, $userId); 
+    } else {
+        echo "User is already booked into this slot", "<br>"; 
+    }; 
+}; 
+
+function findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $userId){
     echo "<br>";
     echo "Function: findSlot", "<br>";
     echo "<br>";
@@ -59,6 +157,7 @@ function findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME
         echo "Slot Found", "<br>"; 
         echo "Slot Id: ", $slotId, "<br>";
         echo "Number of users: ", $numberUsers, "<br>";   
+        checkBooking($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $slotId, $userId);
     } else {
         echo "Slot not found", "<br>"; 
     }
@@ -113,7 +212,7 @@ function checkMembership($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABA
         echo "Membership is valid for type requested", "<br>"; 
         if (strtotime($currentDate) < strtotime($MemberEndDate)){
             echo "Date is valid", "<br>";
-            findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type);
+            findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $userId);
            
         } elseif (strtotime($currentDate) > strtotime($MemberEndDate)){
             // echo "<script>alert('Your membership is not valid to access the cardio gym');document.location='booking.html'</script>";
@@ -125,7 +224,7 @@ function checkMembership($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABA
         echo "Membership is valid for type requested", "<br>"; 
         if (strtotime($currentDate) < strtotime($MemberEndDate)){
             echo "Date is valid", "<br>";
-            findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type);
+            findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $userId);
             
         } elseif (strtotime($currentDate) > strtotime($MemberEndDate)){
             // echo "<script>alert('Your membership is not valid to access the weights gym');document.location='booking.html'</script>";
