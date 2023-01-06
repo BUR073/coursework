@@ -8,3 +8,8 @@ git push origin main
 If this throws and error TRY
  
 git push -f origin main
+
+Objectives
+
+- Create timetable showing users current bookings along with how busy the slots will below  
+    - Allow the user to be able to click a button, either update or delete next to their bookings

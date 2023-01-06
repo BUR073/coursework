@@ -8,6 +8,9 @@
 
 5. Check the user is not already booked into the slot they are trying to book - Complete
 
-6. Insert values into Db to confirm booking
+6. Insert values into Db to confirm booking - complete
+
+7. Write handling for if slot is full, membership is not valid, slot does not exist, outside of operating
+hours, etc 
 
 Need to work out date system for memberships - delete from table when finished or something else? 
