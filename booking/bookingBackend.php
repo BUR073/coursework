@@ -124,8 +124,18 @@ function checkBooking($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_
         echo "User is already booked into this slot", "<br>"; 
     }; 
 }; 
+function convertTypeBool($type){
+    if ($type == 'weights'){
+        return 1; 
+    } elseif ($type == 'cardio'){
+        return 0; 
+    }; 
+};
 
 function findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $type, $userId){
+    // 0 - Cardio
+    // 1 - weights
+
     echo "<br>";
     echo "Function: findSlot", "<br>";
     echo "<br>";
@@ -133,19 +143,21 @@ function findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME
     $dateRequested = $_POST['date']; 
     $timeStart = $_POST['timeStart']; 
     $timeEnd = $_POST['timeEnd']; 
-
+    $type = convertTypeBool($type); 
+    echo "Converted Boolean Type: ", $type, "<br>"; 
     echo "Date requested: ", $dateRequested, "<br>";
     echo "Time start: ", $timeStart, "<br>"; 
     echo "Time end: ", $timeEnd, "<br>"; 
 
 
-    $stmt = $con->prepare('SELECT `SlotId`, `NumberUsers` FROM `Slot` WHERE `TimeStart` = ? AND `TimeFinish` = ? AND `Date` = ? ');
-    $stmt->bind_param('sss', $timeStart, $timeEnd, $dateRequested);
+    $stmt = $con->prepare('SELECT `SlotId`, `NumberUsers` FROM `Slot` WHERE `TimeStart` = ? AND `TimeFinish` = ? AND `Date` = ? AND `Type` = ?');
+    $stmt->bind_param('ssss', $timeStart, $timeEnd, $dateRequested, $type);
             
     $stmt->execute();
 
     $slotId = ''; 
     $numberUsers = ''; 
+    
 
     $stmt->bind_result($slotId, $numberUsers);
 
@@ -153,11 +165,19 @@ function findSlot($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME
 
     $stmt->close();
 
+    echo "Number of Users: ", $numberUsers, "<br>"; 
+
     if ($slotId != ''){
         echo "Slot Found", "<br>"; 
         echo "Slot Id: ", $slotId, "<br>";
         echo "Number of users: ", $numberUsers, "<br>";   
-        checkBooking($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $slotId, $userId);
+        
+        if ($numberUsers < 20){
+            checkBooking($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME, $con, $slotId, $userId);
+        } else {
+            echo "Slot is full", "<br>"; 
+        }
+           
     } else {
         echo "Slot not found", "<br>"; 
     }

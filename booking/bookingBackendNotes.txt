@@ -13,4 +13,6 @@
 7. Write handling for if slot is full, membership is not valid, slot does not exist, outside of operating
 hours, etc 
 
+
+
 Need to work out date system for memberships - delete from table when finished or something else? 
