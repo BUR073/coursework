@@ -55,8 +55,8 @@
 		<div class='container'>
 
 <script> 
-
-function takeId(newButtonId){
+// $row['TimeStart'], $row['TimeFinish'], $row['Date'], $row['Notes']
+function takeId(newButtonId, timeStart, timeFinish, date, notes, type){
 	// alert(newButtonId)
 	$('#modal').modal('show');
 	// document.getElementById("bookingId").innerHTML = newButtonId;
@@ -64,6 +64,7 @@ function takeId(newButtonId){
 
 	$(document).ready(function () { 
     $('input[name="bookingId"]').val(newButtonId);
+	$('input[name="type"]').val(type);
 });
 };
 
@@ -71,47 +72,99 @@ function takeId(newButtonId){
 
 <!-- Modal -->
 <div class='modal fade' id='modal' role='dialog'>
-    <div class='modal-dialog'>
-        <!-- Modal content-->
-        <div class='modal-content'>
-            <div class='modal-header'>
-                <button type='button' class='close' data-dismiss='modal'>&times;</button>
-                <h4 class='modal-title'>Title</h4>
 
-                <form action='myBookingBackend.php' method='post'>
+<div class='modal-dialog'>
+    
+<!-- Modal content-->
 
-                    <label for="type">Type</label><br>
-                    <select name="type" id="type">
-                        <option value="cardio">Cardio Gym</option>
-                        <option value="weight">Weights Gym</option>
-                    </select>
+<div class='modal-content'>
 
-                    <label for="timeStart">Start Time</label><br>
-                    <select name="timeStart" id="timeStart">
-                        <option value="0600">0600</option>
-                        <option value="0700">0700</option>
-                        <option value="0800">0800</option>
-                        <option value="0900">0900</option>
-                        <option value="1000">1000</option>
-                        <option value="1100">1100</option>
-                        <option value="1200">1200</option>
-                        <option value="1300">1300</option>
-                        <option value="1400">1400</option>
-                        <option value="1500">1500</option>
-                        <option value="1600">1600</option>
-                        <option value="1700">1700</option>
-                    </select>
-                    <input type="hidden" name="bookingId" id="bookingId" value="">
-                    <input type="submit" value="Submit">
-                </form>
-            </div>
-            <div class='modal-body'>
-                <input type='button' value='Close' data-dismiss='modal'> 
-            </div>
-        </div>
-    </div>
+<div class='modal-header'>
+
+<button type='button' class='close' data-dismiss='modal'>&times;</button>
+
+<h4 class='modal-title'>Title</h4>
+
+<a id="bookingId">BookingId</a>
+
+<form action='myBookingBackend.php' method='post'>
+
+<label for="type">Type</label><br>
+<select name="type" id="type">
+  <option value="cardio">Cardio Gym</option>
+  <option value="weight">Weights Gym</option>
+</select>
+
+<label for="timeStart">Start Time</label><br>
+<select name="timeStart" id="timeStart">
+  <option value="0600">0600</option>
+  <option value="0700">0700</option>
+
+  <option value="0800">0800</option>
+  <option value="0900">0900</option>
+
+  <option value="1000">1000</option>
+  <option value="1100">1100</option>
+
+  <option value="1200">1200</option>
+  <option value="1300">1300</option>
+
+  <option value="1400">1400</option>
+  <option value="1500">1500</option>
+
+  <option value="1600">1600</option>
+  <option value="1700">1700</option>
+
+</select>
+
+<label for="timeEnd">End Time</label><br>
+<select name="timeEnd" id="timeEnd">
+  <option value="0700">0700</option>
+  <option value="0800">0800</option>
+
+  <option value="0900">0900</option>
+  <option value="1000">1000</option>
+
+  <option value="1100">1100</option>
+  <option value="1200">1200</option>
+
+  <option value="1300">1300</option>
+  <option value="1400">1400</option>
+
+  <option value="1500">1500</option>
+  <option value="1600">1600</option>
+
+  <option value="1700">1700</option>
+  <option value="1800">1800</option>
+
+</select>
+
+<label for="date">Date</label><br> 
+<input type="date" id="date">
+
+<label for="note">Note's</label<br>
+<input type="text" id="note"> 
+
+
+<input type="hidden" name="bookingId" id="bookingId" value="">
+<input type="submit" value="Submit">
+
+
+</form>
+</div>
+
+<div class='modal-body'>
+
+<input type='button' value='Close' data-dismiss='modal'> 
+
+
 </div>
 </div>
+</div>
+</div>
+</div>
+
+
 
 <?php
 
@@ -170,8 +223,6 @@ echo "<table id='adminTable'>
 
 while($row = mysqli_fetch_array($result))
 {
-$newButtonId = ''; 
-$newButtonId = $row['OrderId'];
 
 $newButtonId = ''; 
 $newButtonId = $row['OrderId'];
@@ -190,14 +241,15 @@ $note = $row['Notes'];
 
 $type = ''; 
 $type = $row['Type']; 
+
 echo "<tr>";
-echo "<td>" . $row['OrderId'] . "</td>";
-echo "<td>" . convertType($row['Type']) . "</td>";
-echo "<td>" . formatTime($row['TimeStart']) . "</td>";
-echo "<td>" . formatTime($row['TimeFinish']) . "</td>";
-echo "<td>" . $row['Date'] . "</td>";
-echo "<td>" . $row['Notes'] . "</td>";
-echo "<td>" . "<input type='button' name='cancel' value='Edit' onclick=takeId($newButtonId) id='1'</button>" . "</td>"; 
+echo "<td>" . $newButtonId . "</td>";
+echo "<td>" . convertType($type) . "</td>";
+echo "<td>" . formatTime($timeStart) . "</td>";
+echo "<td>" . formatTime($timeEnd) . "</td>";
+echo "<td>" . $date . "</td>";
+echo "<td>" . $note . "</td>";
+echo "<td>" . "<input type='button' name='cancel' value='Edit' onclick=takeId($newButtonId, $timeStart, $timeEnd, $date, $note, $type) id='1'</button>" . "</td>"; 
 echo "<td>" . "<input type='button' name='cancel' value='Cancel' id='2' data-toggle='modal' data-target='#modal'></button>" . "</td>"; 
 }
 echo "<table>";

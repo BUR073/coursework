@@ -14,9 +14,9 @@ error_reporting(E_ALL);
 $id = ''; 
 if(isset($_POST["bookingId"])){
     $id = $_POST['bookingId']; 
-    echo $id;
+    echo "Booking Id: ", $id, "<br>";
 } else{
-    echo "Nothing"; 
+    echo "Error"; 
 }
 
 
