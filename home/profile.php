@@ -435,7 +435,7 @@ echo "<td><input type='button' data-toggle='modal' name='password' value='Change
 echo "<td><input type='button' data-toggle='modal' name='lastName' value='Change Last Name' data-target='#lastNameModal'</td>";
 echo "<td><input type='button' data-toggle='modal' name='frstName' value='Change First Name' data-target='#firstNameModal'</td>";
 echo "<td><input type='button' data-toggle='modal' name='email' value='Change Email' data-target='#emailModal'</td>";
-echo "<td><input type='button' data-toggle='modal' name='phone' value='Change Phone' data-target='#phoneModal'</td>";
+echo "<td><input type='button' data-toggle='modal'  data-target='#phoneModal'</td>";
 echo "</tr>";
 }
 echo "<table>";
