@@ -11,13 +11,13 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
 error_reporting(E_ALL);
+
 $id = ''; 
-if(isset($_POST["bookingId"])){
-    $id = $_POST['bookingId']; 
-    echo "Booking Id: ", $id, "<br>";
-} else{
-    echo "Error"; 
-}
+
+
+$id = $_POST['bookingIdHidden']; 
+echo "Booking Id: ", $id, "<br>";
+
 
 
 ?> 

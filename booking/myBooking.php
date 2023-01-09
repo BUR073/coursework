@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -8,110 +10,95 @@
 		<link href="../styles/style.css" rel="stylesheet" type="text/css">
 		<link href="../styles/normalize.css" rel="stylesheet" type="text/css"> 
 		<script src="jquery-3.6.1.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script> 
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-  		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+		<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>  -->
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  	
+  
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+		<!-- <script rel="stylesheet" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"></script> 
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> -->
 
 		
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-	</head>
-
-	<body class="loggedin">
-		<nav class="navtop">
-			<div>
-				<h1>Booking</h1>
-                <!-- Heading --> 
-
-				<a href="../membership/membership.html"><i class="fas fa-table"></i>Manage Memberships</a>
-                <!-- Manage memberships button --> 
-
-				<a href="../home/home.php"><i class="fas fa-home"></i>Home</a>
-                <!-- Home button -->  
-
-				<a href="../home/profile.php"><i class="fas fa-user-circle"></i>Profile</a>
-                <!-- Profile button --> 
-
-				<a href="myBooking.php"><i class="fas fa-sign-out-alt"></i>My Bookings</a>
-				<!-- My bookings button -->
-				<a href="../logon/logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
-                <!-- Logout button --> 
-
-				
-				
-				
-			</div>
-		</nav>
-		<div class="content">
-            <!-- Define new division--> 
-
-			<h2>My Bookings</h2>
-			<br>
+</head>
 
 
-			
-		</div>
 
-		<div class='container'>
-
-<script> 
-
-function takeId(newButtonId){
-	// alert(newButtonId)
-	$('#modal').modal('show');
-	// document.getElementById("bookingId").innerHTML = newButtonId;
-	// document.getElementById("boookingId").value = newButtonId;
-
-	$(document).ready(function () { 
-    $('input[name="bookingId"]').val(newButtonId);
-});
-};
-
-</script> 
-
-<!-- Modal -->
-<div class='modal fade' id='modal' role='dialog'>
-    <div class='modal-dialog'>
-        <!-- Modal content-->
-        <div class='modal-content'>
-            <div class='modal-header'>
-                <button type='button' class='close' data-dismiss='modal'>&times;</button>
-                <h4 class='modal-title'>Title</h4>
-
-                <form action='myBookingBackend.php' method='post'>
-
-                    <label for="type">Type</label><br>
-                    <select name="type" id="type">
-                        <option value="cardio">Cardio Gym</option>
-                        <option value="weight">Weights Gym</option>
-                    </select>
-
-                    <label for="timeStart">Start Time</label><br>
-                    <select name="timeStart" id="timeStart">
-                        <option value="0600">0600</option>
-                        <option value="0700">0700</option>
-                        <option value="0800">0800</option>
-                        <option value="0900">0900</option>
-                        <option value="1000">1000</option>
-                        <option value="1100">1100</option>
-                        <option value="1200">1200</option>
-                        <option value="1300">1300</option>
-                        <option value="1400">1400</option>
-                        <option value="1500">1500</option>
-                        <option value="1600">1600</option>
-                        <option value="1700">1700</option>
-                    </select>
-                    <input type="hidden" name="bookingId" id="bookingId" value="">
-                    <input type="submit" value="Submit">
-                </form>
+<!-- The Modal -->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Modal Heading</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class='modal-body'>
-                <input type='button' value='Close' data-dismiss='modal'> 
+            <!-- Modal body -->
+            <div class="modal-body" id="bookingIdText">
+
+            </div>
+            <form action="myBookingBackend.php" method='post'>
+                <div>
+                    <input type="hidden" name="bookingIdHidden" id="bookingIdHidden" value="">
+                </div>
+                <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
-</div>
+
+<script> 
+
+function takeId(newButtonId){
+	
+    $('#myModal').modal('show');
+    document.getElementById("bookingIdText").innerHTML = newButtonId; 
+    alert(newButtonId);
+    try {
+
+        alert($('#bookingIdHidden').val()); 
+     
+        $('#bookingIdHidden').attr('value', newButtonId)
+    } catch(err) {
+        alert(err); 
+    }
+
+};
+
+
+</script> 
+
+<body class="loggedin">
+    <nav class="navtop">
+        <div>
+            <h1>Booking</h1>
+            <!-- Heading --> 
+            <a href="../membership/membership.html"><i class="fas fa-table"></i>Manage Memberships</a>
+            <!-- Manage memberships button --> 
+            <a href="../home/home.php"><i class="fas fa-home"></i>Home</a>
+            <!-- Home button -->  
+            <a href="../home/profile.php"><i class="fas fa-user-circle"></i>Profile</a>
+            <!-- Profile button --> 
+            <a href="myBooking.php"><i class="fas fa-sign-out-alt"></i>My Bookings</a>
+            <!-- My bookings button -->
+            <a href="../logon/logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
+            <!-- Logout button --> 
+        </div>
+    </nav>
+    <div class="content">
+        <!-- Define new division--> 
+        <h2>My Bookings</h2>
+        <br>
+    </div>
+    <div class='container'>
+
 
 <?php
 
@@ -172,24 +159,6 @@ while($row = mysqli_fetch_array($result))
 {
 $newButtonId = ''; 
 $newButtonId = $row['OrderId'];
-
-$newButtonId = ''; 
-$newButtonId = $row['OrderId'];
-
-$timeStart = ''; 
-$timeStart = $row['TimeStart']; 
-
-$timeEnd = ''; 
-$timeEnd = $row['TimeFinish'];
-
-$date = ''; 
-$date = $row['Date']; 
-
-$note = ''; 
-$note = $row['Notes']; 
-
-$type = ''; 
-$type = $row['Type']; 
 echo "<tr>";
 echo "<td>" . $row['OrderId'] . "</td>";
 echo "<td>" . convertType($row['Type']) . "</td>";
@@ -197,7 +166,7 @@ echo "<td>" . formatTime($row['TimeStart']) . "</td>";
 echo "<td>" . formatTime($row['TimeFinish']) . "</td>";
 echo "<td>" . $row['Date'] . "</td>";
 echo "<td>" . $row['Notes'] . "</td>";
-echo "<td>" . "<input type='button' name='cancel' value='Edit' onclick=takeId($newButtonId) id='1'</button>" . "</td>"; 
+echo "<td>" . "<input type='button' name='edit' value='Edit' onclick=takeId($newButtonId) id='1' </button>" . "</td>"; 
 echo "<td>" . "<input type='button' name='cancel' value='Cancel' id='2' data-toggle='modal' data-target='#modal'></button>" . "</td>"; 
 }
 echo "<table>";
