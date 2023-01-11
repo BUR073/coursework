@@ -6,9 +6,8 @@
 		<meta charset="utf-8">
 		<title>My Bookings Page</title>
 		<link href="../style/style.css" rel="stylesheet" type="text/css">
-        <link href="../styles/skeleton.css" rel="stylesheet" type="text/css">
-		<link href="../styles/style.css" rel="stylesheet" type="text/css">
-		<link href="../styles/normalize.css" rel="stylesheet" type="text/css"> 
+     
+        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 
        
@@ -21,8 +20,7 @@
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
 
 
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
-        <script type="text/javascript" src="js/bootstrap-timepicker.min.js"></script>
+
         <link type="text/css" href="css/bootstrap-timepicker.min.css" />
 
 
@@ -63,8 +61,8 @@
 
                 <label for="gymType">Type:</label>
 				<select name="gymType" id="gymType">
-   				<option value="cardio">Cardiovascular Gym</option>
-  				<option value="weights">Weights Room</option>
+   				<option value="Cardio Gym">Cardiovascular Gym</option>
+  				<option value="Weights Gym">Weights Room</option>
 				</select>
 
 
@@ -76,7 +74,7 @@
                 
 
 
-                <button type="submit" id="submit" class="btn btn-primasry">Submit</button>
+                <button type="submit" id="submit" class="btn btn-primary">Submit</button>
 
                 </form>
             </div>
@@ -90,18 +88,23 @@
 
 <script> 
 
-function takeId(newButtonId, startTime, endTime, date, note){
+function takeId(newButtonId, startTime, endTime, date, note, type){
 	
     $('#myModal').modal('show');
 
-    try {
-        $('#bookingIdHidden').attr('value', newButtonId);
-    } catch(err) {
-        alert(err); 
-    }
+    $('#bookingIdHidden').attr('value', newButtonId);
+    $('#timeStart').attr('value', startTime);
+    $('#timeEnd').attr('value', endTime);
+    $('#date').attr('value', date);
+    $('#notes').attr('value', note);
+
+    $("#gymType").val(type).change();
+
 
 
 };
+
+
 
 
 </script> 
@@ -139,7 +142,7 @@ session_start();
 if (!isset($_SESSION['loggedin'])) {
 	header('Location: ../logon/index.html');
 	exit;
-}
+}; 
 
 ini_set('display_errors', 1);
 
@@ -158,16 +161,15 @@ function convertType($type){
 		return 'Cardio Gym';
 	} elseif ($type == '1'){
 		return 'Weights Gym'; 
-	}; 
+	}
 
 }; 
 
 $con=mysqli_connect("localhost","root","","phplogin");
 // Check connection
-if (mysqli_connect_errno())
-{
+if (mysqli_connect_errno()){
 echo "Failed to connect to MySQL: " . mysqli_connect_error();
-}
+};
 // $date = date("Y/m/d");
 
 $id = $_SESSION['id']; 
@@ -175,39 +177,40 @@ $date = strtotime(date("Y/m/d"));
 
 
 $result = mysqli_query($con,"SELECT `OrderId`, `Notes`, `Slot`.`SlotId`, `TimeStart`, `TimeFinish`, `Date`, `Type` 
-FROM `Order` INNER JOIN `Slot` ON `Order`.`OrderId` = `Slot`.`SlotId` WHERE `UserId` = $id AND `Date` > $date;");
+FROM `Order` INNER JOIN `Slot` ON `Order`.`OrderId` = `Slot`.`SlotId` WHERE `UserId` = $id AND `Date` > $date");
 
-echo "<link href='../styles/style.css' rel='stylesheet' type='text/css'>";
-echo "<table id='adminTable'>
-<tr>
-<th>Booking Reference Number</th>
-<th>Type</th>
-<th>Start time</th>
-<th>End time</th>
-<th>Date</th>
-<th>Notes</th>
-<th></th>
-<th></th>
-</tr>";
-
-while($row = mysqli_fetch_array($result))
-{
-
-$newButtonId = $row['OrderId'];
-$startTime = $row['TimeStart']; 
-$endTime = $row['TimeFinish']; 
-$date = $row['Date']; 
-$note = $row['Notes'];
-
+echo "<table id='adminTable'>";
 echo "<tr>";
-echo "<td>" . $newButtonId . "</td>";
-echo "<td>" . convertType($row['Type']) . "</td>";
-echo "<td>" . formatTime($startTime) . "</td>";
-echo "<td>" . formatTime($endTime) . "</td>";
-echo "<td>" . $date . "</td>";
-echo "<td>" . $note . "</td>";
-echo "<td>" . "<input type='button' name='edit' value='Edit' onclick='takeId($newButtonId, $startTime, $endTime, $date, $note)' id='1'>" . "</td>"; 
-// echo "<td>" . "<input type='button' name='edit' value='Edit' onclick=takeId($newButtonId, $startTime, $endTime, $date, $note) id='1'>" . "</td>"; 
+echo "<th>Booking Reference Number</th>";
+echo "<th>Type</th>";
+echo "<th>Start time</th>";
+echo "<th>End time</th>";
+echo "<th>Date</th>";
+echo "<th>Notes</th>";
+echo "<th></th>";
+echo "<th></th>";
+echo "</tr>";
+
+while($row = mysqli_fetch_array($result)){
+    $newButtonId = $row['OrderId'];
+    $startTime = formatTime($row['TimeStart']); 
+    $endTime = formatTime($row['TimeFinish']); 
+    $date = $row['Date']; 
+    $note = $row['Notes'];
+    $type = convertType($row['Type']); 
+
+
+
+
+    echo "<tr>";
+    echo "<td>" . $newButtonId . "</td>";
+    echo "<td>" . $type . "</td>";
+    echo "<td>" . $startTime . "</td>";
+    echo "<td>" . $endTime . "</td>";
+    echo "<td>" . $date . "</td>";
+    echo "<td>" . $note . "</td>";
+    echo "<td>" . "<input type='button' name='edit' value='Edit' onclick='takeId(`$newButtonId`, `$startTime`, `$endTime`, `$date`, `$note`, `$type`)' id='1'>" . "</td>"; 
+
 
 echo "<td>" . "<input type='button' name='cancel' value='Cancel' onclick=takeId($newButtonId) id='2'>" . "</td>"; 
 }
