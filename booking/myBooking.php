@@ -9,28 +9,24 @@
         <link href="../styles/skeleton.css" rel="stylesheet" type="text/css">
 		<link href="../styles/style.css" rel="stylesheet" type="text/css">
 		<link href="../styles/normalize.css" rel="stylesheet" type="text/css"> 
-		<script src="jquery-3.6.1.min.js"></script>
-		<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>  -->
-        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-  	
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+       
   
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
   		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
-		<!-- <script rel="stylesheet" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"></script> 
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> -->
 
 		
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
 
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
 
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/6.2.10/js/tempus-dominus.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/6.2.10/css/tempus-dominus.css"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+        <script type="text/javascript" src="js/bootstrap-timepicker.min.js"></script>
+        <link type="text/css" href="css/bootstrap-timepicker.min.css" />
+
+
+
 
 
         
@@ -45,20 +41,44 @@
         <div class="modal-content">
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Modal Heading</h4>
+                <h4 class="modal-title"></h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <!--Modal body -->
             <div class="modal-body">
 
-            <form action="myBookingBackend.php" method='post'>
+                <form action="myBookingBackend.php" method='post'>
                 
-            <input type="hidden" name="bookingIdHidden" id="bookingIdHidden" value="">
-            <input type="text" name="test"><br>
-            
-                    
-            <button type="submit" id="submit" class="btn btn-primasry">Submit</button>
-            </form>
+                <input type="hidden" name="bookingIdHidden" id="bookingIdHidden" value="">
+
+                <label for="date">Date</label>
+                <input type="date" name="date" id="date" placeholder="">
+
+                <label for="timeStart">Start Time</label>
+                <input type="time" name="timeStart" id="timeStart" placeholder="">
+
+                <label for="timeEnd">End Time</label>
+                <input type="time" name="timeEnd" id="timeEnd" placeholder="">
+
+
+                <label for="gymType">Type:</label>
+				<select name="gymType" id="gymType">
+   				<option value="cardio">Cardiovascular Gym</option>
+  				<option value="weights">Weights Room</option>
+				</select>
+
+
+                <label for="notes">Notes</label>
+
+                <input type="text" id="notes" name="notes" rows="3" cols="30" value="">
+
+
+                
+
+
+                <button type="submit" id="submit" class="btn btn-primasry">Submit</button>
+
+                </form>
             </div>
             <!-- Modal footer -->
             <div class="modal-footer">
@@ -70,18 +90,18 @@
 
 <script> 
 
-function takeId(newButtonId){
+function takeId(newButtonId, startTime, endTime, date, note){
 	
     $('#myModal').modal('show');
+
     try {
         $('#bookingIdHidden').attr('value', newButtonId);
-
     } catch(err) {
         alert(err); 
     }
+
+
 };
-
-
 
 
 </script> 
@@ -139,6 +159,7 @@ function convertType($type){
 	} elseif ($type == '1'){
 		return 'Weights Gym'; 
 	}; 
+
 }; 
 
 $con=mysqli_connect("localhost","root","","phplogin");
@@ -171,17 +192,24 @@ echo "<table id='adminTable'>
 
 while($row = mysqli_fetch_array($result))
 {
-$newButtonId = ''; 
+
 $newButtonId = $row['OrderId'];
+$startTime = $row['TimeStart']; 
+$endTime = $row['TimeFinish']; 
+$date = $row['Date']; 
+$note = $row['Notes'];
+
 echo "<tr>";
-echo "<td>" . $row['OrderId'] . "</td>";
+echo "<td>" . $newButtonId . "</td>";
 echo "<td>" . convertType($row['Type']) . "</td>";
-echo "<td>" . formatTime($row['TimeStart']) . "</td>";
-echo "<td>" . formatTime($row['TimeFinish']) . "</td>";
-echo "<td>" . $row['Date'] . "</td>";
-echo "<td>" . $row['Notes'] . "</td>";
-echo "<td>" . "<input type='button' name='edit' value='Edit' onclick=takeId($newButtonId) id='1' </button>" . "</td>"; 
-echo "<td>" . "<input type='button' name='cancel' value='Cancel' id='2' data-toggle='modal' data-target='#modal'></button>" . "</td>"; 
+echo "<td>" . formatTime($startTime) . "</td>";
+echo "<td>" . formatTime($endTime) . "</td>";
+echo "<td>" . $date . "</td>";
+echo "<td>" . $note . "</td>";
+echo "<td>" . "<input type='button' name='edit' value='Edit' onclick='takeId($newButtonId, $startTime, $endTime, $date, $note)' id='1'>" . "</td>"; 
+// echo "<td>" . "<input type='button' name='edit' value='Edit' onclick=takeId($newButtonId, $startTime, $endTime, $date, $note) id='1'>" . "</td>"; 
+
+echo "<td>" . "<input type='button' name='cancel' value='Cancel' onclick=takeId($newButtonId) id='2'>" . "</td>"; 
 }
 echo "<table>";
 
