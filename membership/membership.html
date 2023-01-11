@@ -24,19 +24,20 @@
                 Please select an option below to start or cancel a membership.
             </p>
 			<form action="membership.php" method="post">
-                <input type="radio" id="gym" name="action" value="gym">
+                <input type="radio" name="action" value="gym">
                 <label for="gym">Gym</label><br>
 
-                <input type="radio" id="leisure" name="action" value="leisure">
-                <label for="css">Leisure</label><br>
+                <input type="radio" name="action" value="cardio">
+                <label for="css">Cardio</label><br>
 
-                <input type="radio" id="cancel" name="action" value="cancel">
+				<input type="radio" name="action" value="combined">
+                <label for="css">Combined</label><br>
+
+                <input type="radio" name="action" value="cancel">
                 <label for="cancel">Cancel Membership</label><br>
 			
 				<input type="submit" value="Submit">
 			
-
-				
             </form>
 
 			

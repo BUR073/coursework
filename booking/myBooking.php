@@ -23,12 +23,24 @@
 
 		
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/6.2.10/js/tempus-dominus.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/6.2.10/css/tempus-dominus.css"></script>
+
+
+        
+
 </head>
 
 
 
 <!-- The Modal -->
-<div class="modal fade" id="myModal">
+<div class="hidden modal fade" id="myModal">
     <div class="modal-dialog">
         <div class="modal-content">
             <!-- Modal Header -->
@@ -36,16 +48,18 @@
                 <h4 class="modal-title">Modal Heading</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <!-- Modal body -->
-            <div class="modal-body" id="bookingIdText">
+            <!--Modal body -->
+            <div class="modal-body">
 
-            </div>
             <form action="myBookingBackend.php" method='post'>
-                <div>
-                    <input type="hidden" name="bookingIdHidden" id="bookingIdHidden" value="">
-                </div>
-                <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+                
+            <input type="hidden" name="bookingIdHidden" id="bookingIdHidden" value="">
+            <input type="text" name="test"><br>
+            
+                    
+            <button type="submit" id="submit" class="btn btn-primasry">Submit</button>
             </form>
+            </div>
             <!-- Modal footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
@@ -59,18 +73,15 @@
 function takeId(newButtonId){
 	
     $('#myModal').modal('show');
-    document.getElementById("bookingIdText").innerHTML = newButtonId; 
-    alert(newButtonId);
     try {
+        $('#bookingIdHidden').attr('value', newButtonId);
 
-        alert($('#bookingIdHidden').val()); 
-     
-        $('#bookingIdHidden').attr('value', newButtonId)
     } catch(err) {
         alert(err); 
     }
-
 };
+
+
 
 
 </script> 
@@ -137,8 +148,11 @@ if (mysqli_connect_errno())
 echo "Failed to connect to MySQL: " . mysqli_connect_error();
 }
 // $date = date("Y/m/d");
+
 $id = $_SESSION['id']; 
 $date = strtotime(date("Y/m/d"));
+
+
 $result = mysqli_query($con,"SELECT `OrderId`, `Notes`, `Slot`.`SlotId`, `TimeStart`, `TimeFinish`, `Date`, `Type` 
 FROM `Order` INNER JOIN `Slot` ON `Order`.`OrderId` = `Slot`.`SlotId` WHERE `UserId` = $id AND `Date` > $date;");
 
@@ -172,7 +186,3 @@ echo "<td>" . "<input type='button' name='cancel' value='Cancel' id='2' data-tog
 echo "<table>";
 
 mysqli_close($con);
-
-
-
-?> 

@@ -39,4 +39,11 @@ Text file to keep track of issues I have had
 - This allows dates to be comparable
 - Issue from bookingBackend.php data comparison in the membership validation 
 
+8. Modals in myBooking.php
+- Add a input
+- Everything goes blank
+- Infuriating
+- I give up
+- Were gonna do a seperate page
+
 
