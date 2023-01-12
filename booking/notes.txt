@@ -1,0 +1,22 @@
+1. Post variables into myBookingBackend
+2. If type has been changed 
+- Check the user has the membership requirments 
+- Check the slot is available for that type 
+- Change slot
+- Remove 1 from the number of users
+- Add one to the new slot
+
+3. If start time has changed
+- Find new slot 
+- Check it's not full 
+- Book use the new slot
+- Remove them from the old slot
+
+4. If data has changed
+- Find new slot
+- check its not full
+- Book new slot
+- Remove user from old slot
+
+5. Notes
+- Update notes

@@ -105,9 +105,7 @@ function takeId(newButtonId, startTime, endTime, date, note, type){
 };
 
 
-
-
-</script> 
+</script>
 
 <body class="loggedin">
     <nav class="navtop">
@@ -210,9 +208,7 @@ while($row = mysqli_fetch_array($result)){
     echo "<td>" . $date . "</td>";
     echo "<td>" . $note . "</td>";
     echo "<td>" . "<input type='button' name='edit' value='Edit' onclick='takeId(`$newButtonId`, `$startTime`, `$endTime`, `$date`, `$note`, `$type`)' id='1'>" . "</td>"; 
-
-
-echo "<td>" . "<input type='button' name='cancel' value='Cancel' onclick=takeId($newButtonId) id='2'>" . "</td>"; 
+    echo "<td>" . "<input type='button' name='cancel' value='Cancel' onclick='cancel(`$newButtonId`)' id='2'>" . "</td>"; 
 }
 echo "<table>";
 
