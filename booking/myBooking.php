@@ -68,7 +68,7 @@
 
                 <label for="notes">Notes</label>
 
-                <input type="text" id="notes" name="notes" rows="3" cols="30" value="">
+                <input type="text" id="notes" name="notes" maxlength="21800" value="">
 
 
                 
@@ -155,9 +155,9 @@ function formatTime($time){
 }; 
 
 function convertType($type){
-	if ($type == '0'){
+	if ($type == '1'){
 		return 'Cardio Gym';
-	} elseif ($type == '1'){
+	} elseif ($type == '0'){
 		return 'Weights Gym'; 
 	}
 
